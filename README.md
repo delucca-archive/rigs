@@ -2,7 +2,7 @@
 
 This repository aims to organize the setup automation for my personal rigs. Each rig is added to a given host group, being one of the following:
 
-* **Work:** Allowed to code and execute projects
+* **Worker:** Allowed to code and execute projects
 * **Farmer:** Responsible for farming Chia
 * **Plotter:** Responsible for plotting Chia
 
@@ -14,9 +14,85 @@ This repository aims to organize the setup automation for my personal rigs. Each
 
 ## Usage
 
+All playbooks from this repository are managed by [Ansible](https://www.ansible.com/). You should [install it](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) to use our playbooks.
+
+Also, before launching a playbook, review your hosts file to check if all hosts are properly linked. Don't forget to follow all the steps in ["adding a new rig"](#adding-a-new-rig) too.
+
+To use my automation, you can choose a playbook in the ["available playbooks"](#available-playbooks) section and them run the following command:
+
+```sh
+TODO
+```
+
 ## Available playbooks
 
+TODO
+
 ## Adding a new rig
+
+The following steps are suggested for my `farmer` and `plotter` rigs. If you're launching a new `worker` rig, you should check [my Notion runbook](https://www.notion.so/odelucca/Workstation-Setup-Runbook-f19fdfa9b6e645c99fcf741cd38debaa)
+
+### 1. Get the rig IP
+
+If the rig is in your local network, you can get it by running the following command:
+
+```sh
+ip a
+```
+
+### 2. Copy your SSH credential to the rig
+
+Knowing the rig user and password, you can run the following command to copy your SSH credential:
+
+```sh
+ssh-copy-id -i ~/.ssh/id_ed25519 <user>@<rig-IP>
+```
+> **IMPORTANT:** You must install the OpenSSH server on the remote rig before running this command
+
+### 3. Login to the rig shell
+
+```sh
+ssh <user>@<rig-IP>
+```
+
+### 4. Remove the rig user password
+
+First, change your sudo user to allow `NOPASSWD`. You need to run:
+
+```sh
+sudo visudo
+```
+
+Them, you can add the following line to that file:
+
+```sh
+ff-farmer ALL=(ALL) NOPASSWD:ALL
+```
+> **IMPORTANT:** Don't forget to change `ff-farmer` with your rig's user
+
+Now, you must delete your user password with the following command:
+
+```sh
+sudo passwd -d `whoami`
+```
+
+### 5. Enable autologin
+
+First, launch the following command to edit the `getty` service:
+
+```sh
+sudo systemctl edit getty@tty1.service
+```
+
+Now, add the following contents to the file you're editting:
+
+```ini
+[Service]
+ExecStart=
+ExecStart=-/sbin/agetty --noissue --autologin <user> %I $TERM
+Type=idle
+```
+> **IMPORTANT:** Don't forget to change `<user>` by your rig username
 
 ## License
 
