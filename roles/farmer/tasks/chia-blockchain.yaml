@@ -1,0 +1,20 @@
+---
+- name: Ensure local src directory
+  file:
+    path: "{{ install_src_path }}"
+    state: directory
+
+- name: Fetch Chia Blockchain source code
+  git:
+    repo: https://github.com/Chia-Network/chia-blockchain.git
+    dest: "{{ chia_install_path }}"
+
+- name: Ensure install script is executable
+  file:
+    dest: "{{ chia_install_path }}/install.sh"
+    mode: a+x
+
+- name: Install Chia Blockchain
+  shell: "./install.sh"
+  args:
+    chdir: "{{ chia_install_path }}"

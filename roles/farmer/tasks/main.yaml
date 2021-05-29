@@ -1,0 +1,5 @@
+---
+- name: Setup Chia Blockchain
+  import_tasks: chia-blockchain.yaml
+  vars:
+    chia_install_path: "{{ install_src_path }}/chia-blockchain"
