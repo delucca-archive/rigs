@@ -7,26 +7,37 @@ This repository aims to organize the setup automation for my personal rigs. Each
 * **Plotter:** Responsible for plotting Chia
 
 * [Table of contents](#)
+  * [Install](#install)
   * [Usage](#usage)
   * [Available playbooks](#available-playbooks)
   * [Adding a new rig](#adding-a-new-rig)
   * [License](#license)
 
+## Install
+
+Before launching any playbook, you need to install the following tools:
+
+- [Ansible](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html)
+
+After installing those dependencies, you need to setup your control node SSH keys and setup all your rigs by following the steps in ["adding a new rig"](#adding-a-new-rig). Finally, you can duplicate the example inventory with the command:
+
+```sh
+cp inventory.yaml.example inventory.yaml
+```
+
+And edit it by changing your node IPs to their proper value.
+
 ## Usage
-
-All playbooks from this repository are managed by [Ansible](https://www.ansible.com/). You should [install it](https://docs.ansible.com/ansible/latest/installation_guide/intro_installation.html) to use our playbooks.
-
-Also, before launching a playbook, review your hosts file to check if all hosts are properly linked. Don't forget to follow all the steps in ["adding a new rig"](#adding-a-new-rig) too.
 
 To use my automation, you can choose a playbook in the ["available playbooks"](#available-playbooks) section and them run the following command:
 
 ```sh
-TODO
+ansible-playbook -i inventory.yaml <the-desired-playbook>
 ```
 
 ## Available playbooks
 
-TODO
+* [`setup`](./setup.yaml): This playbook setup all your hosts based on their roles.
 
 ## Adding a new rig
 

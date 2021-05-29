@@ -1,0 +1,17 @@
+all:
+  hosts:
+    control_node: &control_node
+      ansible_connection: local
+      ansible_python_interpreter: "{{ ansible_playbook_python }}"
+
+workers:
+  hosts:
+    control_node: *control_node
+
+farmers:
+  hosts:
+    control_node: *control_node
+
+plotters:
+  hosts:
+    control_node: *control_node

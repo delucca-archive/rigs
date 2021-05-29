@@ -1,0 +1,4 @@
+---
+- hosts: farmers
+  roles:
+  - farmer
