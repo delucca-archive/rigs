@@ -1,0 +1,12 @@
+[Unit]
+Description=Starts hpool Chia miner
+StartLimitIntervalSec=0
+
+[Service]
+Restart=always
+RestartSec=1
+User={{ ansible_user }}
+ExecStart={{ bin_dir_path }}/hpool-miner -config {{ lib_dir_path }}/hpool/miner-config.yaml
+
+[Install]
+WantedBy=default.target

@@ -24,6 +24,7 @@
   copy:
     src: /tmp/hpool-miner/linux/hpool-miner-chia
     dest: "{{ bin_dir_path }}/hpool-miner"
+    mode: a+x
 
 - name: Ensure lib directory exists
   file:
@@ -34,3 +35,16 @@
   template:
     src: templates/hpool-miner-config.yaml.j2
     dest: "{{ lib_dir_path }}/hpool/miner-config.yaml"
+
+- name: Create miner service
+  become: yes
+  template:
+    src: templates/hpool-miner.service.j2
+    dest: /etc/systemd/system/hpool-miner.service
+
+- name: Configure miner service
+  become: yes
+  systemd:
+    name: hpool-miner
+    enabled: yes
+    state: started
