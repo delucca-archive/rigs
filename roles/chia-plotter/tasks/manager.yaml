@@ -1,4 +1,11 @@
 ---
-- name: Test
-  debug:
-    var: ansible_user
+- name: Checking manager installation
+  stat:
+    path: "{{ chia_plot_manager_install_path }}"
+  register: chia_plot_manager_installation
+
+- name: Ensure local src directory
+  file:
+    path: "{{ install_src_path }}"
+    state: directory
+  when: chia_plot_manager_installation.stat.exists == false

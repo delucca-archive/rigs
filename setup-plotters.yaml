@@ -1,0 +1,6 @@
+---
+- hosts: plotters
+  roles:
+  - common
+  - chia-node
+  - chia-plotter

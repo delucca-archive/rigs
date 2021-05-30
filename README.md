@@ -37,7 +37,9 @@ ansible-playbook -i inventory.yaml <the-desired-playbook>
 
 ## Available playbooks
 
-* [`setup`](./setup.yaml): This playbook setup all your hosts based on their roles.
+* [`setup`](./setup.yaml): Setup all your hosts based on their roles
+* [`setup-farmers`](./setup-farmers.yaml): Setup only our farmer hosts
+* [`setup-plotters`](./setup-plotters.yaml): Setup only our plotter hosts
 
 ## Adding a new rig
 

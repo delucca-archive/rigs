@@ -1,0 +1,6 @@
+---
+- hosts: farmers
+  roles:
+  - common
+  - chia-node
+  - chia-farmer

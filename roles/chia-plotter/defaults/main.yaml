@@ -1,0 +1,1 @@
+chia_plotter_install_path: "{{ install_src_path }}/chia-plotter"
