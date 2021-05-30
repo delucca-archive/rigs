@@ -1,12 +1,28 @@
 all:
+  storages:
+  - &tmp_storage_001
+    uuid: 8ba3f3a0-c30e-4250-99ad-de694fd4e1be
+    mount_dir_name: xch-tmp-8ba3-e1be
+    fstype: ext4
+
+  - &tmp_storage_002
+    uuid: e46dc385-0b2a-4249-8cdf-709715f245d1
+    mount_dir_name: xch-tmp-e46d-45d1
+    fstype: ext4
+
   hosts:
     control_node: &control_node
       ansible_connection: local
       ansible_python_interpreter: "{{ ansible_playbook_python }}"
+      ansible_user: delucca
+      attached_storages:
 
     farm_ff_001: &farm_ff_001
       ansible_host: 10.0.0.7
       ansible_user: ff-farmer
+      attached_storages:
+      - *tmp_storage_001
+      - *tmp_storage_002
 
 workers:
   hosts:

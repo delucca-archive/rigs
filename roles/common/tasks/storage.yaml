@@ -1,0 +1,9 @@
+- name: Ensure all host storages are properly mounted
+  become: yes
+  mount:
+    path: "/mnt/{{ item.mount_dir_name }}"
+    src: "UUID={{ item.uuid }}"
+    fstype: "{{ item.fstype }}"
+    state: mounted
+  with_items: "{{ attached_storages }}"
+  when: attached_storages and attached_storages | length > 0

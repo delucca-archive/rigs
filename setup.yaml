@@ -1,4 +1,5 @@
 ---
 - hosts: farmers
   roles:
+  - common
   - farmer
