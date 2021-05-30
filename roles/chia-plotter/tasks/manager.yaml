@@ -1,4 +1,7 @@
 ---
+- name: Gathering service facts
+  service_facts:
+
 - name: Checking manager installation
   stat:
     path: "{{ chia_plot_manager_install_path }}"
@@ -9,11 +12,15 @@
     path: "{{ chia_plot_manager_install_path }}/venv"
   register: chia_plot_manager_venv
 
+- name: Getting service status
+  set_fact:
+    plotter_service: "{{ ansible_facts.services['chia-plotter.service'] | default({ 'state': 'absent' }) }}"
 
 - name: Defining facts regarding plotter installation
   set_fact:
     plotter_is_installed: "{{ chia_plot_manager_installation.stat.exists }}"
     plotter_venv_is_created: "{{ chia_plot_manager_venv.stat.exists }}"
+    plotter_service_is_running: "{{ plotter_service.state != 'running' }}"
 
 - name: Ensure local src directory
   file:
@@ -71,42 +78,49 @@
     src: templates/plotter-clear.x.j2
     dest: "{{ bin_dir_path }}/plotter-clear"
     mode: a+x
+  when: not plotter_is_installed
 
 - name: Adds start plotter binary
   template:
     src: templates/plotter-start.x.j2
     dest: "{{ bin_dir_path }}/plotter-start"
     mode: a+x
+  when: not plotter_is_installed
 
 - name: Adds stop plotter binary
   template:
     src: templates/plotter-stop.x.j2
     dest: "{{ bin_dir_path }}/plotter-stop"
     mode: a+x
+  when: not plotter_is_installed
 
 - name: Adds view plotter binary
   template:
     src: templates/plotter-view.x.j2
     dest: "{{ bin_dir_path }}/plotter-view"
     mode: a+x
+  when: not plotter_is_installed
 
 - name: Adds plotter status binary
   template:
     src: templates/plotter-status.x.j2
     dest: "{{ bin_dir_path }}/plotter-status"
     mode: a+x
+  when: not plotter_is_installed
 
 - name: Adds restart plotter binary
   template:
     src: templates/plotter-restart.x.j2
     dest: "{{ bin_dir_path }}/plotter-restart"
     mode: a+x
+  when: not plotter_is_installed
 
 - name: Create plotter service
   become: yes
   template:
     src: templates/chia-plotter.service.j2
     dest: /etc/systemd/system/chia-plotter.service
+  when: not plotter_service_is_running
 
 - name: Configure plotter service
   become: yes
@@ -114,3 +128,11 @@
     name: chia-plotter
     enabled: yes
     state: started
+  when: not plotter_service_is_running
+
+- name: Restart previous plotter service
+  become: yes
+  systemd:
+    name: hpool-miner
+    state: restarted
+  when: plotter_service_is_running

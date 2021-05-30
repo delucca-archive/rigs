@@ -60,15 +60,17 @@
     dest: /etc/systemd/system/hpool-miner.service
   when: not hpool_miner_is_running
 
-- name: Restart previous miner service
-  become: yes
-  systemd:
-    name: hpool-miner
-    state: restarted
-
 - name: Configure miner service
   become: yes
   systemd:
     name: hpool-miner
     enabled: yes
     state: started
+  when: not hpool_miner_is_running
+
+- name: Restart previous miner service
+  become: yes
+  systemd:
+    name: hpool-miner
+    state: restarted
+  when: hpool_miner_is_running
