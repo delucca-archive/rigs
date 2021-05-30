@@ -61,3 +61,10 @@
     src: templates/chia-node.service.j2
     dest: /etc/systemd/system/chia-node.service
   when: chia_node_service.stat.exists == false
+
+- name: Configure node service
+  become: yes
+  systemd:
+    name: chia-node
+    enabled: yes
+    state: started
