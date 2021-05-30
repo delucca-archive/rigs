@@ -2,11 +2,16 @@ all:
   storages:
   # CHIA TEMPORARY STORAGES
   - &xch_ff_tmp_storage_001
+    uuid: da0fb299-11df-4ff8-a3bb-78799a80e38b
+    mount_dir_name: xch-tmp-da0f-e38b
+    fstype: ext4
+
+  - &xch_ff_tmp_storage_002
     uuid: 8ba3f3a0-c30e-4250-99ad-de694fd4e1be
     mount_dir_name: xch-tmp-8ba3-e1be
     fstype: ext4
 
-  - &xch_ff_tmp_storage_002
+  - &xch_ff_tmp_storage_003
     uuid: e46dc385-0b2a-4249-8cdf-709715f245d1
     mount_dir_name: xch-tmp-e46d-45d1
     fstype: ext4
@@ -32,6 +37,11 @@ all:
     mount_dir_name: xch-plots-ff-a49d-d5ac
     fstype: ext4
 
+  - &xch_ff_plots_storage_005
+    uuid: e62e79d9-0c57-4a72-8c6d-0aff24d749ad
+    mount_dir_name: xch-plots-ff-0c56-d539
+    fstype: ext4
+
   hosts:
     control_node: &control_node
       machine_id: 428573f692124a3fa24b89adec4cb25a
@@ -39,15 +49,18 @@ all:
       ansible_python_interpreter: "{{ ansible_playbook_python }}"
       ansible_user: delucca
       attached_storages:
+      - *xch_ff_tmp_storage_001
+      - *xch_ff_plots_storage_005
       farmer_plot_dirs:
+      - *xch_ff_plots_storage_005
 
     farm_ff_001: &farm_ff_001
       machine_id: 24ece319d9f24ddca677746cfdd62477
       ansible_host: 10.0.0.7
       ansible_user: ff-farmer
       attached_storages:
-      - *xch_ff_tmp_storage_001
       - *xch_ff_tmp_storage_002
+      - *xch_ff_tmp_storage_003
       - *xch_ff_plots_storage_001
       - *xch_ff_plots_storage_002
       - *xch_ff_plots_storage_003
