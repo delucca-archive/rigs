@@ -1,3 +1,4 @@
 ---
 - name: Mount and configure storage
   import_tasks: storage.yaml
+  when: attached_storages and attached_storages | length > 0

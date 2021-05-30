@@ -1,0 +1,18 @@
+path:
+{% for plot_dir in farmer_plot_dirs %}
+- {{ mount_dir_path }}/{{ plot_dir.mount_dir_name }}
+{% endfor %}
+minerName: xch-{{ ansible_user }}-{{ farmer_id }}
+apiKey: {{ hpool_api_key }}
+cachePath: ""
+deviceId: ""
+extraParams: {}
+log:
+  lv: info
+  path: /home/{{ ansible_user }}/.local/logs/hpool
+  name: miner.log
+url:
+  info: ""
+  submit: ""
+scanPath: true
+scanMinute: 30

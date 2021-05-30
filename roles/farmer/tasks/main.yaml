@@ -5,3 +5,6 @@
 - name: Setup Chia Blockchain
   import_tasks: chia-blockchain.yaml
   when: ansible_facts.services['chia-node.service'].state != 'running'
+
+- name: Setup Chia miner
+  import_tasks: miner.yaml
