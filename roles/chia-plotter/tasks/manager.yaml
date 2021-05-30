@@ -20,7 +20,7 @@
   set_fact:
     plotter_is_installed: "{{ chia_plot_manager_installation.stat.exists }}"
     plotter_venv_is_created: "{{ chia_plot_manager_venv.stat.exists }}"
-    plotter_service_is_running: "{{ plotter_service.state != 'running' }}"
+    plotter_service_is_running: "{{ plotter_service.state == 'running' }}"
 
 - name: Ensure local src directory
   file:
