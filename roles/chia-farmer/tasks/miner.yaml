@@ -3,7 +3,8 @@
   service_facts:
 
 - name: Defining if the hpool miner is running
-  set_fact: hpool_miner_is_running={{ ansible_facts.services['hpool-miner.service'].state == 'running' }}
+  set_fact:
+    hpool_miner_is_running: "{{ ansible_facts.services['hpool-miner.service'].state == 'running' }}"
 
 - name: Ensure dependencies
   package:

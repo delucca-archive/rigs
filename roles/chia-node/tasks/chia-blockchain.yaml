@@ -5,7 +5,8 @@
   register: chia_installation
 
 - name: Defining if Chia Blockchain is installed
-  set_fact: chia_is_installed={{ chia_installation.stat.exists }}
+  set_fact:
+    chia_is_installed: "{{ chia_installation.stat.exists }}"
 
 - name: Ensure local src directory
   file:
