@@ -1,5 +1,5 @@
 ---
-- name: Register variable regarding Chia Blockchain installation path
+- name: Checking Chia Blockchain installation path
   stat:
     path: "{{ chia_install_path }}"
   register: chia_installation
@@ -26,6 +26,10 @@
   args:
     chdir: "{{ chia_install_path }}"
 
+- name: Checking Chia keypair
+  shell: "{{ chia_bin }} keys show | grep \"Fingerprint\" | cut -d' ' -f2"
+  register: chia_keypair_host_fingerprint
+
 - name: Init Chia mainnet
   command: "{{ chia_bin }} init"
 
@@ -34,14 +38,17 @@
     src: files/chia-mnemonics.txt
     dest: /tmp/chia-mnemonics.txt
     decrypt: yes
+  when: chia_keypair_host_fingerprint == chia_keypair_desired_fingerprint
 
 - name: Add Chia keypair
   command: "{{ chia_bin }} keys add -f /tmp/chia-mnemonics.txt"
+  when: chia_keypair_host_fingerprint == chia_keypair_desired_fingerprint
 
 - name: Remove Chia keypair temporary file
   file:
     path: /tmp/chia-mnemonics.txt
     state: absent
+  when: chia_keypair_host_fingerprint == chia_keypair_desired_fingerprint
 
 - name: Create node service
   become: yes
