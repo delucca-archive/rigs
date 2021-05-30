@@ -1,0 +1,3 @@
+---
+- name: Setup plot manager
+  import_tasks: manager.yaml

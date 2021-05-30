@@ -1,5 +1,14 @@
 ---
-- hosts: farmers
+- hosts: all
   roles:
   - common
-  - farmer
+
+- hosts: farmers
+  roles:
+  - chia-node
+  - chia-farmer
+
+- hosts: plotters
+  roles:
+  - chia-node
+  - chia-plotter
