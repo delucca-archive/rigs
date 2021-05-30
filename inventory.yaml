@@ -34,14 +34,15 @@ all:
 
   hosts:
     control_node: &control_node
+      machine_id: 428573f692124a3fa24b89adec4cb25a
       ansible_connection: local
       ansible_python_interpreter: "{{ ansible_playbook_python }}"
       ansible_user: delucca
       attached_storages:
-      farmer_id: 0
       farmer_plot_dirs:
 
     farm_ff_001: &farm_ff_001
+      machine_id: 24ece319d9f24ddca677746cfdd62477
       ansible_host: 10.0.0.7
       ansible_user: ff-farmer
       attached_storages:
@@ -51,7 +52,6 @@ all:
       - *xch_ff_plots_storage_002
       - *xch_ff_plots_storage_003
       - *xch_ff_plots_storage_004
-      farmer_id: 1
       farmer_plot_dirs:
       - *xch_ff_plots_storage_001
       - *xch_ff_plots_storage_002

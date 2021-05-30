@@ -8,3 +8,4 @@
 
 - name: Setup Chia miner
   import_tasks: miner.yaml
+  when: farmer_plot_dirs and farmer_plot_dirs | length > 0

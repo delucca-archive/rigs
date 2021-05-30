@@ -24,3 +24,13 @@
   copy:
     src: /tmp/hpool-miner/linux/hpool-miner-chia
     dest: "{{ bin_dir_path }}/hpool-miner"
+
+- name: Ensure lib directory exists
+  file:
+    path: "{{ lib_dir_path }}/hpool"
+    state: directory
+
+- name: Create hpool config
+  template:
+    src: templates/hpool-miner-config.yaml.j2
+    dest: "{{ lib_dir_path }}/hpool/miner-config.yaml"

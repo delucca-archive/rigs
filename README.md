@@ -114,6 +114,10 @@ Type=idle
 ```
 > **IMPORTANT:** Don't forget to change `<user>` by your rig username
 
+### 6. Add your rig to our inventory
+
+After finishing the basic setup, go to your control node and add your rig to our hosts. You can do so by copying another rig structure in our `all.hosts` key and creating your own. We suggest using your machine unique identifier (use `cat /etc/machine-id` to find yours) as your `machine-id`.
+
 ## License
 
 Distributed under the Apache 2.0 License. See [`LICENSE`](LICENSE) for more information.

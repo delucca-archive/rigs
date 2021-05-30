@@ -1,7 +1,10 @@
 local_path: "{{ ansible_env.HOME}}/.local"
 install_src_path: "{{ local_path }}/src"
 bin_dir_path: "{{ local_path }}/bin"
+lib_dir_path: "{{ local_path }}/lib"
+
 chia_install_path: "{{ install_src_path }}/chia-blockchain"
 chia_bin: "{{ chia_install_path }}/venv/bin/chia"
 chia_keypair_desired_fingerprint: "664672856"
+
 mount_dir_path: /mnt
