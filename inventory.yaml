@@ -1,13 +1,35 @@
 all:
   storages:
-  - &tmp_storage_001
+  # CHIA TEMPORARY STORAGES
+  - &xch_ff_tmp_storage_001
     uuid: 8ba3f3a0-c30e-4250-99ad-de694fd4e1be
     mount_dir_name: xch-tmp-8ba3-e1be
     fstype: ext4
 
-  - &tmp_storage_002
+  - &xch_ff_tmp_storage_002
     uuid: e46dc385-0b2a-4249-8cdf-709715f245d1
     mount_dir_name: xch-tmp-e46d-45d1
+    fstype: ext4
+
+  # CHIA PLOT STORAGES
+  - &xch_ff_plot_storage_001
+    uuid: 8c729b78-149a-4b99-917f-7bf9397f1c7c
+    mount_dir_name: xch-plot-ff-d41f-de9d
+    fstype: ext4
+
+  - &xch_ff_plot_storage_002
+    uuid: 5be63090-0239-46c5-874f-b024b3def8b8
+    mount_dir_name: xch-plot-ff-01ba-4cd1
+    fstype: ext4
+
+  - &xch_ff_plot_storage_003
+    uuid: 0a6d118c-e880-4f3f-a5ee-818ea94de542
+    mount_dir_name: xch-plot-ff-78ae-59f0
+    fstype: ext4
+
+  - &xch_ff_plot_storage_004
+    uuid: 8e3d5927-574a-4e57-9847-9cd966f3847c
+    mount_dir_name: xch-plot-ff-a49d-d5ac
     fstype: ext4
 
   hosts:
@@ -21,8 +43,12 @@ all:
       ansible_host: 10.0.0.7
       ansible_user: ff-farmer
       attached_storages:
-      - *tmp_storage_001
-      - *tmp_storage_002
+      - *xch_ff_tmp_storage_001
+      - *xch_ff_tmp_storage_002
+      - *xch_ff_plot_storage_001
+      - *xch_ff_plot_storage_002
+      - *xch_ff_plot_storage_003
+      - *xch_ff_plot_storage_004
 
 workers:
   hosts:
