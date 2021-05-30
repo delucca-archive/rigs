@@ -1,1 +1,3 @@
 install_src_path: "{{ ansible_env.HOME}}/.local/src"
+chia_install_path: "{{ install_src_path }}/chia-blockchain"
+chia_bin: "{{ chia_install_path }}/venv/bin/chia"

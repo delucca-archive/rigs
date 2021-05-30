@@ -1,5 +1,5 @@
 ---
-- name: Check if Chia Blockchain is already cloned
+- name: Register variable regarding Chia Blockchain installation path
   stat:
     path: "{{ chia_install_path }}"
   register: chia_installation
@@ -25,3 +25,26 @@
   shell: "./install.sh"
   args:
     chdir: "{{ chia_install_path }}"
+
+- name: Init Chia mainnet
+  command: "{{ chia_bin }} init"
+
+- name: Copy Chia keypair temporary file
+  copy:
+    src: files/chia-mnemonics.txt
+    dest: /tmp/chia-mnemonics.txt
+    decrypt: yes
+
+- name: Add Chia keypair
+  command: "{{ chia_bin }} keys add -f /tmp/chia-mnemonics.txt"
+
+- name: Remove Chia keypair temporary file
+  file:
+    path: /tmp/chia-mnemonics.txt
+    state: absent
+
+- name: Create node service
+  become: yes
+  template:
+    src: templates/chia-node.service.j2
+    dest: /etc/systemd/system/chia-node.service

@@ -81,6 +81,15 @@ ff-farmer ALL=(ALL) NOPASSWD:ALL
 ```
 > **IMPORTANT:** Don't forget to change `ff-farmer` with your rig's user
 
+Also, don't forget to enabled passwordless sudo by editing the following line:
+
+```sh
+# BEFORE
+%sudo   ALL=(ALL:ALL) ALL
+# AFTER
+%sudo  ALL=(ALL:ALL) NOPASSWD:ALL
+```
+
 Now, you must delete your user password with the following command:
 
 ```sh
