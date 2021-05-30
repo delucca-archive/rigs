@@ -4,8 +4,8 @@
     path: "{{ chia_install_path }}"
   register: chia_installation
 
-- name: Defining if Chia Blockchain is already installed
-  set_fact: chia_is_installed={{ chia_installation.stat.exists == false }}
+- name: Defining if Chia Blockchain is installed
+  set_fact: chia_is_installed={{ chia_installation.stat.exists }}
 
 - name: Ensure local src directory
   file:
@@ -23,11 +23,13 @@
   file:
     dest: "{{ chia_install_path }}/install.sh"
     mode: a+x
+  when: not chia_is_installed
 
 - name: Install Chia Blockchain
   shell: "./install.sh"
   args:
     chdir: "{{ chia_install_path }}"
+  when: not chia_is_installed
 
 - name: Checking Chia keypair
   shell: "{{ chia_bin }} keys show | grep \"Fingerprint\" | cut -d' ' -f2"
@@ -38,6 +40,7 @@
 
 - name: Init Chia mainnet
   command: "{{ chia_bin }} init"
+  when: not chia_is_installed
 
 - name: Copy Chia keypair temporary file
   copy:

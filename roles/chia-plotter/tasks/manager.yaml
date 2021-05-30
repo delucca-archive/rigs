@@ -4,14 +4,17 @@
     path: "{{ chia_plot_manager_install_path }}"
   register: chia_plot_manager_installation
 
+- name: Defining if Chia plotter is already installed
+  set_fact: plotter_is_installed={{ chia_plot_manager_installation.stat.exists }}
+
 - name: Ensure local src directory
   file:
     path: "{{ install_src_path }}"
     state: directory
-  when: chia_plot_manager_installation.stat.exists == false
+  when: not plotter_is_installed
 
 - name: Fetch Swar plot manager source code
   git:
     repo: https://github.com/swar/Swar-Chia-Plot-Manager.git
     dest: "{{ chia_plot_manager_install_path }}"
-  when: chia_plot_manager_installation.stat.exists == false
+  when: not plotter_is_installed
