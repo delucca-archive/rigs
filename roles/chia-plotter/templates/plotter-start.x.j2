@@ -1,0 +1,6 @@
+#!/bin/sh
+
+cd "{{ chia_plot_manager_install_path }}"
+
+{{ bin_dir_path }}/plotter-clear
+{{ chia_plot_manager_install_path }}/venv/bin/python {{ chia_plot_manager_install_path }}/manager.py start

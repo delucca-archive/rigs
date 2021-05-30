@@ -1,5 +1,5 @@
 [Unit]
-Description=Starts Chia node
+Description=Starts Chia plotter
 Wants=network-online.target
 After=network.target network-online.target
 StartLimitIntervalSec=0
@@ -9,9 +9,10 @@ Type=forking
 Restart=always
 RestartSec=1
 User={{ ansible_user }}
-
-ExecStart=/usr/bin/env PATH={{ chia_install_path }}/venv/bin:$PATH chia start node
-ExecStop=/usr/bin/env PATH={{ chia_install_path }}/venv/bin:$PATH chia stop node -d
+Group={{ ansible_user }}
+WorkingDirectory={{ chia_plot_manager_install_path }}
+ExecStart={{ bin_dir_path }}/plotter-start
+ExecStop={{ bin_dir_path }}/plotter-stop
 
 [Install]
 WantedBy=multi-user.target

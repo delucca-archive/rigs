@@ -42,6 +42,7 @@
   package:
     name:
     - "{{ pip_package_name }}"
+    - jq
     state: present
   when: not plotter_venv_is_created
 
@@ -49,6 +50,7 @@
   pip:
     name:
     - virtualenv
+    - yq
   when: not plotter_venv_is_created
 
 - name: Install requirements
@@ -63,3 +65,52 @@
   copy:
     src: "plotter-config-{{ machine_id }}.yaml"
     dest: "{{ chia_plot_manager_install_path }}/config.yaml"
+
+- name: Adds clear plotter binary
+  template:
+    src: templates/plotter-clear.x.j2
+    dest: "{{ bin_dir_path }}/plotter-clear"
+    mode: a+x
+
+- name: Adds start plotter binary
+  template:
+    src: templates/plotter-start.x.j2
+    dest: "{{ bin_dir_path }}/plotter-start"
+    mode: a+x
+
+- name: Adds stop plotter binary
+  template:
+    src: templates/plotter-stop.x.j2
+    dest: "{{ bin_dir_path }}/plotter-stop"
+    mode: a+x
+
+- name: Adds view plotter binary
+  template:
+    src: templates/plotter-view.x.j2
+    dest: "{{ bin_dir_path }}/plotter-view"
+    mode: a+x
+
+- name: Adds plotter status binary
+  template:
+    src: templates/plotter-status.x.j2
+    dest: "{{ bin_dir_path }}/plotter-status"
+    mode: a+x
+
+- name: Adds restart plotter binary
+  template:
+    src: templates/plotter-restart.x.j2
+    dest: "{{ bin_dir_path }}/plotter-restart"
+    mode: a+x
+
+- name: Create plotter service
+  become: yes
+  template:
+    src: templates/chia-plotter.service.j2
+    dest: /etc/systemd/system/chia-plotter.service
+
+- name: Configure plotter service
+  become: yes
+  systemd:
+    name: chia-plotter
+    enabled: yes
+    state: started
