@@ -1,5 +1,5 @@
 ---
-- name: Checking if Chia Node is running
+- name: Gathering service facts
   service_facts:
 
 - name: Setup Chia Blockchain
