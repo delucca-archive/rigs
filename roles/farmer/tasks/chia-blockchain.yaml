@@ -50,8 +50,14 @@
     state: absent
   when: chia_keypair_host_fingerprint == chia_keypair_desired_fingerprint
 
+- name: Checking Chia Node service path
+  stat:
+    path: /etc/systemd/system/chia-node.service
+  register: chia_node_service
+
 - name: Create node service
   become: yes
   template:
     src: templates/chia-node.service.j2
     dest: /etc/systemd/system/chia-node.service
+  when: chia_node_service.stat.exists == false
