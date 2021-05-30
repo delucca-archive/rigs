@@ -1,3 +1,7 @@
 ---
+- name: Checking if Chia Node is running
+  service_facts:
+
 - name: Setup Chia Blockchain
   import_tasks: chia-blockchain.yaml
+  when: ansible_facts.services['chia-node.service'].state != 'running'
