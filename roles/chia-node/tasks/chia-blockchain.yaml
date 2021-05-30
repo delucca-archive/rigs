@@ -4,17 +4,20 @@
     path: "{{ chia_install_path }}"
   register: chia_installation
 
+- name: Defining if Chia Blockchain is already installed
+  set_fact: chia_is_installed={{ chia_installation.stat.exists == false }}
+
 - name: Ensure local src directory
   file:
     path: "{{ install_src_path }}"
     state: directory
-  when: chia_installation.stat.exists == false
+  when: not chia_is_installed
 
 - name: Fetch Chia Blockchain source code
   git:
     repo: https://github.com/Chia-Network/chia-blockchain.git
     dest: "{{ chia_install_path }}"
-  when: chia_installation.stat.exists == false
+  when: not chia_is_installed
 
 - name: Ensure install script is executable
   file:
@@ -30,6 +33,9 @@
   shell: "{{ chia_bin }} keys show | grep \"Fingerprint\" | cut -d' ' -f2"
   register: chia_keypair_host_fingerprint
 
+- name: Defining if Chia Blockchain is already installed
+  set_fact: chia_keypair_is_loaded={{ chia_keypair_host_fingerprint == chia_keypair_desired_fingerprint }}
+
 - name: Init Chia mainnet
   command: "{{ chia_bin }} init"
 
@@ -38,17 +44,17 @@
     src: files/chia-mnemonics.txt
     dest: /tmp/chia-mnemonics.txt
     decrypt: yes
-  when: chia_keypair_host_fingerprint == chia_keypair_desired_fingerprint
+  when: not chia_keypair_is_loaded
 
 - name: Add Chia keypair
   command: "{{ chia_bin }} keys add -f /tmp/chia-mnemonics.txt"
-  when: chia_keypair_host_fingerprint == chia_keypair_desired_fingerprint
+  when: not chia_keypair_is_loaded
 
 - name: Remove Chia keypair temporary file
   file:
     path: /tmp/chia-mnemonics.txt
     state: absent
-  when: chia_keypair_host_fingerprint == chia_keypair_desired_fingerprint
+  when: not chia_keypair_is_loaded
 
 - name: Checking Chia Node service path
   stat:
@@ -60,7 +66,7 @@
   template:
     src: templates/chia-node.service.j2
     dest: /etc/systemd/system/chia-node.service
-  when: chia_node_service.stat.exists == false
+  when: not chia_is_installed
 
 - name: Configure node service
   become: yes
@@ -68,3 +74,4 @@
     name: chia-node
     enabled: yes
     state: started
+  when: not chia_is_installed
