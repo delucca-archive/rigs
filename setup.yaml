@@ -1,3 +1,4 @@
 ---
 - import_playbook: setup-farmers.yaml
 - import_playbook: setup-plotters.yaml
+- import_playbook: setup-workers.yaml

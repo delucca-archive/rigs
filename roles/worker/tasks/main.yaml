@@ -1,0 +1,3 @@
+---
+- name: Setup code environment
+  import_tasks: code.yaml

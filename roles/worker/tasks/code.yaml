@@ -1,0 +1,58 @@
+---
+- name: Install package dependencies
+  become: yes
+  package:
+    state: present
+    name:
+    - alacritty
+    - xclip
+    - fzf
+    - fd
+    - tree
+    - ripgrep
+    - starship
+    - zsh
+    - ack
+    - jq
+    - bat
+    - tmux
+    - keychain
+    - the_silver_searcher
+    - yay
+    - base-devel
+    - diff-so-fancy
+    - git
+    - docker
+    - docker-compose
+    - kubectl
+    - kubectx
+    - go
+    - terraform
+    - aws-cli
+    - minikube
+
+- name: Check AUR dependencies
+  ignore_errors: yes
+  shell: "pacman -Qs {{ item }}"
+  with_items: &aur_packages
+  - navi
+  - bottom
+  - bat-extras-git
+  - pgcli
+  - mycli
+  register: installed_aur_packages
+
+- name: Install AUR dependencies
+  command: "yay -S --noconfirm {{ item }}"
+  with_items: *aur_packages
+  when: installed_aur_packages.failed is defined and installed_aur_packages.failed == true
+
+- name: Install zinit
+  git:
+    repo: https://github.com/zdharma/zinit.git
+    dest: "{{ home_dir_path }}/.zinit/bin"
+
+- name: Ensure Git folder structure
+  file:
+    path: "{{ home_dir_path }}/Git"
+    state: directory

@@ -2,6 +2,7 @@ local_path: "{{ ansible_env.HOME}}/.local"
 install_src_path: "{{ local_path }}/src"
 bin_dir_path: "{{ local_path }}/bin"
 lib_dir_path: "{{ local_path }}/lib"
+home_dir_path: "/home/{{ ansible_user }}"
 
 chia_install_path: "{{ install_src_path }}/chia-blockchain"
 chia_bin: "{{ chia_install_path }}/venv/bin/chia"
