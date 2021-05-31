@@ -1,0 +1,23 @@
+---
+- name: Checking Fresh installation path
+  stat:
+    path: "{{ home_dir_path }}/.fresh/build"
+  register: fresh_installation
+
+- name: Deciding if Fresh is installed
+  set_fact:
+    fresh_is_installed: "{{ fresh_installation.stat.exists }}"
+
+- name: Fetch dotfiles manager
+  git:
+    repo: https://github.com/freshshell/fresh.git
+    dest: "{{ home_dir_path }}/.fresh/source/freshshell/fresh"
+  when: not fresh_is_installed
+
+- name: Applies Fresh self-install config
+  shell: echo "fresh freshshell/fresh bin/fresh --bin" >> ~/.freshrc
+  when: not fresh_is_installed
+
+- name: Install Fresh
+  shell: "{{ home_dir_path }}/.fresh/source/freshshell/fresh/bin/fresh"
+  when: not fresh_is_installed

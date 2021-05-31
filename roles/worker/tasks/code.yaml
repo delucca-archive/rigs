@@ -47,10 +47,20 @@
   with_items: *aur_packages
   when: installed_aur_packages.failed is defined and installed_aur_packages.failed == true
 
+- name: Checking Zinit installation path
+  stat:
+    path: "{{ home_dir_path }}/.zinit/bin"
+  register: zinit_installation
+
+- name: Deciding if Zinit is installed
+  set_fact:
+    zinit_is_installed: "{{ zinit_installation.stat.exists }}"
+
 - name: Install zinit
   git:
     repo: https://github.com/zdharma/zinit.git
     dest: "{{ home_dir_path }}/.zinit/bin"
+  when: not zinit_is_installed
 
 - name: Ensure Git folder structure
   file:

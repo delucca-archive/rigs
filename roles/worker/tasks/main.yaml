@@ -1,3 +1,6 @@
 ---
 - name: Setup code environment
   import_tasks: code.yaml
+
+- name: Setup dotfiles
+  import_tasks: dotfiles.yaml
