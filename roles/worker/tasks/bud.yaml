@@ -1,0 +1,38 @@
+---
+- name: Install package dependencies
+  become: yes
+  package:
+    state: present
+    name:
+    - postgresql
+
+- name: Ensure PostgreSQL owns it's directory
+  become: yes
+  file:
+    path: /var/lib/postgres
+    owner: postgres
+    group: postgres
+
+- name: Get PostgreSQL data contents
+  become: yes
+  shell: ls -la
+  args:
+    chdir: /var/lib/postgres/data
+  register: postgresql_data_contents
+
+- name: Decide if PostgreSQL is initialized
+  set_fact:
+    postgres_is_initialized: "{{ postgresql_data_contents['stdout_lines'] | length > 2 }}"
+
+- name: Initialize PostgreSQL
+  become: yes
+  become_user: postgres
+  command: initdb --locale en_US.UTF-8 -D '/var/lib/postgres/data'
+  when: not postgres_is_initialized
+
+- name: Ensure PostgreSQL service is running
+  become: yes
+  service:
+    name: postgresql
+    state: started
+    enabled: yes
