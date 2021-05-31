@@ -72,13 +72,14 @@
   copy:
     src: "plotter-config-{{ machine_id }}.yaml"
     dest: "{{ chia_plot_manager_install_path }}/config.yaml"
+  register: plotter_config
 
 - name: Adds clear plotter binary
   template:
     src: templates/plotter-clear.x.j2
     dest: "{{ bin_dir_path }}/plotter-clear"
     mode: a+x
-  when: not plotter_is_installed
+    when: not plotter_is_installed
 
 - name: Adds start plotter binary
   template:
@@ -133,4 +134,4 @@
 - name: Restart previous plotter service
   become: yes
   shell: "{{ bin_dir_path}}/plotter-restart"
-  when: plotter_service_is_running
+  when: plotter_service_is_running and plotter_config.changed

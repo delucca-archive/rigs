@@ -9,5 +9,5 @@ done
 
 available_tmp_directories=$(cat {{ chia_plot_manager_install_path }}/config.yaml | yq .jobs[].temporary_directory -r)
 for tmp_dir in $available_tmp_directories; do
-  rm -r ${tmp_dir}/*
+  find "${tmp_dir}" -mindepth 1 -maxdepth 1 -exec rm -r -- {} +
 done
