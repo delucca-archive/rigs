@@ -1,4 +1,11 @@
 ---
+- name: Removes unwanted packages
+  become: yes
+  package:
+    state: absent
+    name:
+    - vim
+
 - name: Install package dependencies
   become: yes
   package:
@@ -30,6 +37,7 @@
     - terraform
     - aws-cli
     - minikube
+    - gvim
 
 - name: Check AUR dependencies
   ignore_errors: yes
@@ -40,6 +48,9 @@
   - bat-extras-git
   - pgcli
   - mycli
+  - vundle
+  - tmuxinator
+  - jetbrains-toolbox
   register: installed_aur_packages
 
 - name: Install AUR dependencies
@@ -66,3 +77,39 @@
   file:
     path: "{{ home_dir_path }}/Git"
     state: directory
+
+- name: Adding user {{ ansible_user }} to Docker group
+  become: yes
+  user:
+    name: "{{ ansible_user }}"
+    append: yes
+    groups:
+    - docker
+
+- name: Launch and enable Docker service
+  become: yes
+  systemd:
+    name: docker
+    state: started
+    enabled: yes
+
+- name: Checking tpm installation path
+  stat:
+    path: "{{ home_dir_path }}/.tmux/plugins/tpm"
+  register: tpm_installation
+
+- name: Install tmux plugin manager
+  git:
+    repo: https://github.com/tmux-plugins/tpm.git
+    dest: "{{ home_dir_path }}/.tmux/plugins/tpm"
+  when: tpm_installation.stat.exists == false
+
+- name: Ensure AWS config directory exists
+  file:
+    path: "{{ home_dir_path }}/.aws"
+    state: directory
+
+- name: Copy AWS CLI config
+  copy:
+    src: files/aws-config
+    dest: "{{ home_dir_path }}/.aws/config"

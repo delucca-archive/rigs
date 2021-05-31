@@ -1,0 +1,24 @@
+---
+- name: Install package dependencies
+  become: yes
+  package:
+    state: present
+    name:
+    - discord
+    - vlc
+
+- name: Check AUR dependencies
+  ignore_errors: yes
+  shell: "pacman -Qs {{ item }}"
+  with_items: &aur_packages
+  - telegram-desktop
+  - spotify
+  - stremio
+  - gnome-shell-pomodoro
+  register: installed_aur_packages
+
+- name: Install AUR dependencies
+  command: "yay -S --noconfirm {{ item }}"
+  with_items: *aur_packages
+  when: installed_aur_packages.failed is defined and installed_aur_packages.failed == true
+

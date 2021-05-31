@@ -53,12 +53,20 @@
     state: present
   when: not plotter_venv_is_created
 
-- name: Install pip dependencies
+- name: Install pip dependencies for user
   pip:
     name:
     - virtualenv
     - yq
   when: not plotter_venv_is_created
+
+- name: Install pip dependencies for sudo
+  become: yes
+  pip:
+    name:
+    - virtualenv
+    - yq
+      #when: not plotter_venv_is_created
 
 - name: Install requirements
   pip:

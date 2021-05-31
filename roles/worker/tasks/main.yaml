@@ -4,3 +4,9 @@
 
 - name: Setup dotfiles
   import_tasks: dotfiles.yaml
+
+- name: Setup fonts
+  import_tasks: fonts.yaml
+
+- name: Setup day-to-day
+  import_tasks: day-to-day.yaml
