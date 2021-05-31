@@ -16,30 +16,45 @@ all:
     mount_dir_name: xch-tmp-e46d-45d1
     fstype: ext4
 
+  - &xch_blz_tmp_storage_001
+    uuid: 698797ee-37bb-4968-b2cd-789f7a16fdbc
+    mount_dir_name: xch-tmp-6987-fdbc
+    fstype: ext4
+
   # CHIA PLOT STORAGES
-  - &xch_ff_plots_storage_001
+  - &xch_ff_plot_storage_001
     uuid: 8c729b78-149a-4b99-917f-7bf9397f1c7c
     mount_dir_name: xch-plots-ff-d41f-de9d
     fstype: ext4
 
-  - &xch_ff_plots_storage_002
+  - &xch_ff_plot_storage_002
     uuid: 5be63090-0239-46c5-874f-b024b3def8b8
     mount_dir_name: xch-plots-ff-01ba-4cd1
     fstype: ext4
 
-  - &xch_ff_plots_storage_003
+  - &xch_ff_plot_storage_003
     uuid: 0a6d118c-e880-4f3f-a5ee-818ea94de542
     mount_dir_name: xch-plots-ff-78ae-59f0
     fstype: ext4
 
-  - &xch_ff_plots_storage_004
+  - &xch_ff_plot_storage_004
     uuid: 8e3d5927-574a-4e57-9847-9cd966f3847c
     mount_dir_name: xch-plots-ff-a49d-d5ac
     fstype: ext4
 
-  - &xch_ff_plots_storage_005
+  - &xch_ff_plot_storage_005
     uuid: e62e79d9-0c57-4a72-8c6d-0aff24d749ad
     mount_dir_name: xch-plots-ff-0c56-d539
+    fstype: ext4
+
+  - &xch_blz_plot_storage_001
+    uuid: 6f004b96-daba-4413-ab1f-fdcb2c7d956c
+    mount_dir_name: xch-plots-blz-febb-348d
+    fstype: ext4
+
+  - &xch_blz_plot_storage_002
+    uuid: 2b6f31f0-1e33-4f5c-8c30-e875c27ae2ff
+    mount_dir_name: xch-plots-blz-c535-1e69
     fstype: ext4
 
   hosts:
@@ -50,9 +65,9 @@ all:
       ansible_user: delucca
       attached_storages:
       - *xch_ff_tmp_storage_001
-      - *xch_ff_plots_storage_005
+      - *xch_ff_plot_storage_005
       farmer_plot_dirs:
-      - *xch_ff_plots_storage_005
+      - *xch_ff_plot_storage_005
 
     farm_ff_001: &farm_ff_001
       machine_id: 24ece319d9f24ddca677746cfdd62477
@@ -61,15 +76,27 @@ all:
       attached_storages:
       - *xch_ff_tmp_storage_002
       - *xch_ff_tmp_storage_003
-      - *xch_ff_plots_storage_001
-      - *xch_ff_plots_storage_002
-      - *xch_ff_plots_storage_003
-      - *xch_ff_plots_storage_004
+      - *xch_ff_plot_storage_001
+      - *xch_ff_plot_storage_002
+      - *xch_ff_plot_storage_003
+      - *xch_ff_plot_storage_004
       farmer_plot_dirs:
-      - *xch_ff_plots_storage_001
-      - *xch_ff_plots_storage_002
-      - *xch_ff_plots_storage_003
-      - *xch_ff_plots_storage_004
+      - *xch_ff_plot_storage_001
+      - *xch_ff_plot_storage_002
+      - *xch_ff_plot_storage_003
+      - *xch_ff_plot_storage_004
+
+    farm_blz_001: &farm_blz_001
+      machine_id: e1f96a2f8dbc4c76b22b1cdd1f9d00cb
+      ansible_host: 10.0.0.5
+      ansible_user: blz-farmer
+      attached_storages:
+      - *xch_blz_tmp_storage_001
+      - *xch_blz_plot_storage_001
+      - *xch_blz_plot_storage_002
+      farmer_plot_dirs:
+      - *xch_blz_plot_storage_001
+      - *xch_blz_plot_storage_002
 
 workers:
   hosts:
@@ -79,8 +106,10 @@ farmers:
   hosts:
     control_node: *control_node
     farm_ff_001: *farm_ff_001
+    farm_blz_001: *farm_blz_001
 
 plotters:
   hosts:
     control_node: *control_node
     farm_ff_001: *farm_ff_001
+    farm_blz_001: *farm_blz_001
