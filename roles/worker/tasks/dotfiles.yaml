@@ -21,3 +21,26 @@
 - name: Install Fresh
   shell: "{{ home_dir_path }}/.fresh/source/freshshell/fresh/bin/fresh"
   when: not fresh_is_installed
+
+- name: Fetch dotfiles
+  git:
+    repo: https://github.com/delucca/dotfiles.git
+    dest: "{{ home_dir_path }}/.dotfiles"
+
+- name: Updates Fresh config
+  file:
+    src: "{{ home_dir_path }}/.dotfiles/freshrc"
+    dest: "{{ home_dir_path }}/.freshrc"
+    force: true
+    state: link
+
+- name: Remove old dotfiles
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+  - "{{ home_dir_path }}/.gitconfig"
+  - "{{ home_dir_path }}/.zshrc"
+
+- name: Sync dotfiles
+  shell: "source {{ home_dir_path }}/.fresh/build/shell.sh && fresh"
