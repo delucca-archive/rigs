@@ -11,6 +11,7 @@
     hpool_miner_is_running: "{{ hpool_miner_service.state == 'running' }}"
 
 - name: Ensure dependencies
+  become: yes
   package:
     name:
     - unzip

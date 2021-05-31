@@ -180,7 +180,7 @@ jobs:
     temporary_directory: /mnt/xch-tmp-6987-fdbc
     temporary2_directory:
     destination_directory: /mnt/xch-plots-blz-febb-348d
-    size: 30
+    size: 32
     bitfield: true
     threads: 4
     buckets: 128

@@ -132,7 +132,5 @@
 
 - name: Restart previous plotter service
   become: yes
-  systemd:
-    name: hpool-miner
-    state: restarted
+  shell: "{{ bin_dir_path}}/plotter-restart"
   when: plotter_service_is_running
