@@ -5,6 +5,7 @@
     state: present
     name:
     - postgresql
+    - dbeaver
 
 - name: Ensure PostgreSQL owns it's directory
   become: yes

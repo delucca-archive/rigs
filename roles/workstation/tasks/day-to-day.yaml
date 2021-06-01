@@ -15,6 +15,7 @@
   - spotify
   - stremio
   - gnome-shell-pomodoro
+  - skypeforlinux-stable-bin
   register: installed_aur_packages
 
 - name: Install AUR dependencies

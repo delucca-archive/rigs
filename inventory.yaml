@@ -83,7 +83,7 @@ all:
       farmer_plot_dirs:
       - *xch_ff_plot_storage_001 # full
       - *xch_ff_plot_storage_002
-      - *xch_ff_plot_storage_003
+      - *xch_ff_plot_storage_003 # full
       - *xch_ff_plot_storage_004
 
     farm_blz_001: &farm_blz_001

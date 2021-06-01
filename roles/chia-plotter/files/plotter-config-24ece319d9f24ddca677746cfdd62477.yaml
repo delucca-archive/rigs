@@ -201,12 +201,12 @@ jobs:
     cpu_affinity: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
 
   - name: xch-tmp-e46d-45d1
-    max_plots: 4
+    max_plots: 35
     farmer_public_key: a1ab315add7be3982fc9986bbbb56c757f229ec12e22c1abfeae227f70512ee8e17df4cf45a78af868e6ceee56756f9e
     pool_public_key: 8bdb3a53fd74860f4cf42f8e33938e92dac6ac805b71366c513b3e4c528b6419843ea3b21360651f0ad35b32e317cc18
     temporary_directory: /mnt/xch-tmp-e46d-45d1
     temporary2_directory:
-    destination_directory: /mnt/xch-plots-ff-78ae-59f0
+    destination_directory: /mnt/xch-plots-ff-a49d-d5ac
     size: 32
     bitfield: true
     threads: 8

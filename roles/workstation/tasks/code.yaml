@@ -122,5 +122,10 @@
 
 - name: Install pipx packages
   shell: "pipx install {{ item }}"
+  ignore_errors: true # pipx returns a non-zero code if the package is already installed
   with_items:
   - poetry
+  - jupyterthemes
+
+- name: Install Jupyter theme
+  shell: jt -t chesterish
