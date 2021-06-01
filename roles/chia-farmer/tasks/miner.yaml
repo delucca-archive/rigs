@@ -2,76 +2,77 @@
 - name: Gathering service facts
   service_facts:
 
-- name: Getting hpool miner service status
+- name: Getting farmer service status
   set_fact:
-    hpool_miner_service: "{{ ansible_facts.services['hpool-miner.service'] | default({ 'state': 'absent' }) }}"
+    farmer_service: "{{ ansible_facts.services['chia-farmer.service'] | default({ 'state': 'absent' }) }}"
 
-- name: Defining if the hpool miner is running
+- name: Defining if the farmer is running
   set_fact:
-    hpool_miner_is_running: "{{ hpool_miner_service.state == 'running' }}"
+    farmer_is_running: "{{ farmer_service.state == 'running' }}"
 
 - name: Ensure dependencies
   become: yes
   package:
     name:
     - unzip
-  when: not hpool_miner_is_running
+    - screen
+  when: not farmer_is_running
 
 - name: Ensure temporary directory exists
   file:
     path: /tmp/hpool-miner
     state: directory
-  when: not hpool_miner_is_running
+  when: not farmer_is_running
 
 - name: Fetch hpool miner binary
   unarchive:
     src: "https://github.com/hpool-dev/chia-miner/releases/download/{{ hpool_miner_version }}/HPool-Miner-chia-{{ hpool_miner_version }}-linux.zip"
     dest: /tmp/hpool-miner
     remote_src: yes
-  when: not hpool_miner_is_running
+  when: not farmer_is_running
 
 - name: Ensure bin directory exists
   file:
     path: "{{ bin_dir_path }}"
     state: directory
-  when: not hpool_miner_is_running
+  when: not farmer_is_running
 
 - name: Copy hpool miner binary to user bin
   copy:
     src: /tmp/hpool-miner/linux/hpool-miner-chia
     dest: "{{ bin_dir_path }}/hpool-miner"
     mode: a+x
-  when: not hpool_miner_is_running
+  when: not farmer_is_running
 
 - name: Ensure lib directory exists
   file:
     path: "{{ lib_dir_path }}/hpool"
     state: directory
-  when: not hpool_miner_is_running
+  when: not farmer_is_running
 
 - name: Create hpool config
   template:
     src: templates/hpool-miner-config.yaml.j2
     dest: "{{ lib_dir_path }}/hpool/miner-config.yaml"
 
-- name: Create miner service
+- name: Create farmer service
   become: yes
   template:
-    src: templates/hpool-miner.service.j2
-    dest: /etc/systemd/system/hpool-miner.service
-  when: not hpool_miner_is_running
+    src: templates/chia-farmer.service.j2
+    dest: /etc/systemd/system/chia-farmer.service
+  when: not farmer_is_running
 
-- name: Configure miner service
+- name: Configure farmer service
   become: yes
   systemd:
-    name: hpool-miner
+    name: chia-farmer
     enabled: yes
     state: started
-  when: not hpool_miner_is_running
+  when: not farmer_is_running
 
-- name: Restart previous miner service
+- name: Restart previous farmer service
   become: yes
   systemd:
-    name: hpool-miner
+    name: chia-farmer
     state: restarted
-  when: hpool_miner_is_running
+  when: farmer_is_running

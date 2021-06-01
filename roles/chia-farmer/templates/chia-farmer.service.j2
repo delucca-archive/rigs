@@ -1,0 +1,17 @@
+[Unit]
+Description=Chia Farmer
+Wants=network-online.target
+After=network.target network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=forking
+Restart=always
+RestartSec=1
+User={{ ansible_user }}
+Group={{ ansible_user }}
+ExecStart=/usr/bin/screen -dmS chia-farmer bash -c "{{ bin_dir_path }}/hpool-miner -config {{ lib_dir_path }}/hpool/miner-config.yaml"
+ExecStop=/usr/bin/screen -S chia-farmer -X quit
+
+[Install]
+WantedBy=screen.target

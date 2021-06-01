@@ -98,17 +98,17 @@ all:
       - *xch_blz_plot_storage_001
       - *xch_blz_plot_storage_002
 
-workers:
+workstations:
   hosts:
     control_node: *control_node
 
-farmers:
+chia_farmers:
   hosts:
     control_node: *control_node
     farm_ff_001: *farm_ff_001
     farm_blz_001: *farm_blz_001
 
-plotters:
+chia_plotters:
   hosts:
     control_node: *control_node
     farm_ff_001: *farm_ff_001

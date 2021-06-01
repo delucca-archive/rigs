@@ -1,4 +1,10 @@
 ---
+- name: Ensure dependencies
+  become: yes
+  package:
+    name:
+    - screen
+
 - name: Checking Chia Blockchain installation path
   stat:
     path: "{{ chia_install_path }}"
@@ -65,12 +71,23 @@
     path: /etc/systemd/system/chia-node.service
   register: chia_node_service
 
+- name: Gathering service facts
+  service_facts:
+
+- name: Getting Chia node service status
+  set_fact:
+    chia_node_service: "{{ ansible_facts.services['chia-node.service'] | default({ 'state': 'absent' }) }}"
+
+- name: Defining if the Chia node is running
+  set_fact:
+    chia_node_is_running: "{{ chia_node_service.state == 'running' }}"
+
 - name: Create node service
   become: yes
   template:
     src: templates/chia-node.service.j2
     dest: /etc/systemd/system/chia-node.service
-  when: not chia_is_installed
+  when: not chia_node_is_running
 
 - name: Configure node service
   become: yes
@@ -78,4 +95,4 @@
     name: chia-node
     enabled: yes
     state: started
-  when: not chia_is_installed
+  when: not chia_node_is_running

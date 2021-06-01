@@ -1,5 +1,0 @@
----
-- hosts: workers
-  roles:
-  - common
-  - worker
