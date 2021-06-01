@@ -89,6 +89,13 @@
     mode: a+x
   when: not plotter_is_installed
 
+- name: Adds plotter status binary
+  template:
+    src: templates/plotter-status.x.j2
+    dest: "{{ bin_dir_path }}/plotter-status"
+    mode: a+x
+  when: not plotter_is_installed
+
 - name: Create plotter service
   become: yes
   template:
