@@ -66,7 +66,7 @@
     name:
     - virtualenv
     - yq
-      #when: not plotter_venv_is_created
+  when: not plotter_venv_is_created
 
 - name: Install requirements
   pip:
@@ -82,45 +82,10 @@
     dest: "{{ chia_plot_manager_install_path }}/config.yaml"
   register: plotter_config
 
-- name: Adds clear plotter binary
+- name: Adds collect plotter garbage binary
   template:
-    src: templates/plotter-clear.x.j2
-    dest: "{{ bin_dir_path }}/plotter-clear"
-    mode: a+x
-    when: not plotter_is_installed
-
-- name: Adds start plotter binary
-  template:
-    src: templates/plotter-start.x.j2
-    dest: "{{ bin_dir_path }}/plotter-start"
-    mode: a+x
-  when: not plotter_is_installed
-
-- name: Adds stop plotter binary
-  template:
-    src: templates/plotter-stop.x.j2
-    dest: "{{ bin_dir_path }}/plotter-stop"
-    mode: a+x
-  when: not plotter_is_installed
-
-- name: Adds view plotter binary
-  template:
-    src: templates/plotter-view.x.j2
-    dest: "{{ bin_dir_path }}/plotter-view"
-    mode: a+x
-  when: not plotter_is_installed
-
-- name: Adds plotter status binary
-  template:
-    src: templates/plotter-status.x.j2
-    dest: "{{ bin_dir_path }}/plotter-status"
-    mode: a+x
-  when: not plotter_is_installed
-
-- name: Adds restart plotter binary
-  template:
-    src: templates/plotter-restart.x.j2
-    dest: "{{ bin_dir_path }}/plotter-restart"
+    src: templates/collect-plotter-garbage.x.j2
+    dest: "{{ bin_dir_path }}/collect-plotter-garbage"
     mode: a+x
   when: not plotter_is_installed
 
@@ -138,8 +103,3 @@
     enabled: yes
     state: started
   when: not plotter_service_is_running
-
-- name: Restart previous plotter service
-  become: yes
-  shell: "{{ bin_dir_path}}/plotter-restart"
-  when: plotter_service_is_running and plotter_config.changed
