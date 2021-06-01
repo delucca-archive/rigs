@@ -113,3 +113,14 @@
   copy:
     src: files/aws-config
     dest: "{{ home_dir_path }}/.aws/config"
+
+- name: Install pipx
+  shell: "python3 -m {{ item }}"
+  with_items:
+  - pip install --user pipx
+  - pipx ensurepath
+
+- name: Install pipx packages
+  shell: "pipx install {{ item }}"
+  with_items:
+  - poetry
