@@ -90,9 +90,10 @@
   when: not plotter_is_installed
 
 - name: Adds plotter status binary
+  become: yes
   template:
     src: templates/plotter-status.x.j2
-    dest: "{{ bin_dir_path }}/plotter-status"
+    dest: /usr/bin/plotter-status
     mode: a+x
   when: not plotter_is_installed
 
