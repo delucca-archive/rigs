@@ -108,7 +108,7 @@ chia_farmers:
     farm_ff_001: *farm_ff_001
     farm_blz_001: *farm_blz_001
 
-chia_plotters:
+chia_harvesters:
   hosts:
     control_node: *control_node
     farm_ff_001: *farm_ff_001

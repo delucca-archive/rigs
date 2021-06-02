@@ -1,6 +1,0 @@
----
-- hosts: chia_plotters
-  roles:
-  - common
-  - chia-node
-  - chia-plotter

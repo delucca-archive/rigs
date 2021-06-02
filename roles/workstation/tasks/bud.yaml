@@ -37,3 +37,15 @@
     name: postgresql
     state: started
     enabled: yes
+
+- name: Check AUR dependencies
+  ignore_errors: yes
+  shell: "pacman -Qs {{ item }}"
+  with_items: &aur_packages
+  - waypoint-git
+  register: installed_aur_packages
+
+- name: Install AUR dependencies
+  command: "yay -S --noconfirm {{ item }}"
+  with_items: *aur_packages
+  when: installed_aur_packages.failed is defined and installed_aur_packages.failed == true

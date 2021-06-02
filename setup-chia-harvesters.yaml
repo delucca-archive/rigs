@@ -1,0 +1,6 @@
+---
+- hosts: chia_harvesters
+  roles:
+  - common
+  - chia-node
+  - chia-harvester
