@@ -95,7 +95,7 @@ all:
 
     farm_blz_001: &farm_blz_001
       machine_id: e1f96a2f8dbc4c76b22b1cdd1f9d00cb
-      ansible_host: 10.0.0.5
+      ansible_host: 10.0.0.11
       ansible_user: blz-farmer
       attached_storages:
       - *xch_blz_tmp_storage_001
