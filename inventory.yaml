@@ -78,7 +78,7 @@ all:
 
     farm_ff_001: &farm_ff_001
       machine_id: 24ece319d9f24ddca677746cfdd62477
-      ansible_host: 10.0.0.7
+      ansible_host: 10.0.0.12
       ansible_user: ff-farmer
       attached_storages:
       - *xch_ff_tmp_storage_002
