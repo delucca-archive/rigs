@@ -31,29 +31,23 @@
     remote_src: yes
   when: not farmer_is_running
 
-- name: Ensure bin directory exists
+- name: Ensure installation directory exists
   file:
-    path: "{{ bin_dir_path }}"
+    path: "{{ hpool_miner_install_path }}"
     state: directory
   when: not farmer_is_running
 
-- name: Copy hpool miner binary to user bin
+- name: Copy hpool miner binary to installation path
   copy:
     src: /tmp/hpool-miner/linux/hpool-miner-chia
-    dest: "{{ bin_dir_path }}/hpool-miner"
+    dest: "{{ hpool_miner_install_path }}/hpool-miner"
     mode: a+x
-  when: not farmer_is_running
-
-- name: Ensure lib directory exists
-  file:
-    path: "{{ lib_dir_path }}/hpool"
-    state: directory
   when: not farmer_is_running
 
 - name: Create hpool config
   template:
-    src: templates/hpool-miner-config.yaml.j2
-    dest: "{{ lib_dir_path }}/hpool/miner-config.yaml"
+    src: templates/config.yaml.j2
+    dest: "{{ hpool_miner_install_path }}/config.yaml"
 
 - name: Create farmer service
   become: yes

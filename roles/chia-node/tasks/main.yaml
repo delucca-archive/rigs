@@ -13,3 +13,6 @@
 - name: Setup Chia Blockchain
   import_tasks: chia-blockchain.yaml
   when: not chia_node_is_running
+
+- name: Setup notifications
+  import_tasks: notification.yaml

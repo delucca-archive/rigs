@@ -1,0 +1,7 @@
+---
+- name: Install package dependencies
+  become: yes
+  package:
+    state: present
+    name:
+    - xxhash

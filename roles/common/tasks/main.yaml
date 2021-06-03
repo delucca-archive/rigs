@@ -1,4 +1,6 @@
 ---
-- name: Mount and configure storage
-  import_tasks: storage.yaml
-  when: attached_storages and attached_storages | length > 0
+- name: Gather common facts
+  import_tasks: facts.yaml
+
+- name: Install common dependencies
+  import_tasks: dependencies.yaml

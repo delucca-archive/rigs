@@ -1,10 +1,11 @@
-local_path: "{{ ansible_env.HOME}}/.local"
-install_src_path: "{{ local_path }}/src"
-bin_dir_path: "{{ local_path }}/bin"
-lib_dir_path: "{{ local_path }}/lib"
 home_dir_path: "/home/{{ ansible_user }}"
+local_dir_path: "{{ home_dir_path }}/.local"
+src_dir_path: "{{ local_dir_path }}/src"
+bin_dir_path: "{{ local_dir_path }}/bin"
+lib_dir_path: "{{ local_dir_path }}/lib"
+logs_dir_path: "{{ local_dir_path }}/logs"
 
-chia_install_path: "{{ install_src_path }}/chia-blockchain"
+chia_install_path: "{{ src_dir_path }}/chia-blockchain"
 chia_bin: "{{ chia_install_path }}/venv/bin/chia"
 
 mount_dir_path: /mnt

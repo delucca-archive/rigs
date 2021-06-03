@@ -1,0 +1,17 @@
+---
+- name: Ensure all host farmers are properly mounted
+  become: yes
+  mount:
+    path: "{{ mount_dir_path }}/farmer-{{ attached_farmer_uuid_hashmap[item] }}"
+    src: "UUID={{ item }}"
+    fstype: ext4
+    state: mounted
+  with_items: "{{ attached_farmer_uuids }}"
+
+- name: Ensure all mounted farmers are owner by host user
+  become: yes
+  file:
+    path: "{{ mount_dir_path }}/farmer-{{ attached_farmer_uuid_hashmap[item] }}"
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+  with_items: "{{ attached_farmer_uuids }}"

@@ -1,20 +1,20 @@
 ---
 - name: Ensure local fonts directory exists
   file:
-    path: "{{ local_path }}/share/fonts"
+    path: "{{ local_dir_path }}/share/fonts"
     state: directory
 
 # SF Mono
 # -------------------------------------------------------------------------------------------------
 - name: Checking SF Mono installation
   stat:
-    path: "{{ local_path }}/share/fonts/SF-Mono-Nerd-Font"
+    path: "{{ local_dir_path }}/share/fonts/SF-Mono-Nerd-Font"
   register: sf_mono_installation
 
 - name: Fetch SF Mono font
   unarchive:
     src: https://github.com/epk/SF-Mono-Nerd-Font/releases/download/v15.0d5e1/SF-Mono-Nerd-Font.zip
-    dest: "{{ local_path }}/share/fonts"
+    dest: "{{ local_dir_path }}/share/fonts"
     remote_src: yes
   when: sf_mono_installation.stat.exists == false
 
@@ -22,13 +22,13 @@
 # -------------------------------------------------------------------------------------------------
 - name: Checking SF Pro Display installation
   stat:
-    path: "{{ local_path }}/share/fonts/San-Francisco-Pro-Fonts-master"
+    path: "{{ local_dir_path }}/share/fonts/San-Francisco-Pro-Fonts-master"
   register: sf_pro_installation
 
 - name: Fetch SF Pro Display font
   unarchive:
     src: https://github.com/sahibjotsaggu/San-Francisco-Pro-Fonts/archive/refs/heads/master.zip
-    dest: "{{ local_path }}/share/fonts"
+    dest: "{{ local_dir_path }}/share/fonts"
     remote_src: yes
   when: sf_pro_installation.stat.exists == false
 
@@ -36,12 +36,12 @@
 # -------------------------------------------------------------------------------------------------
 - name: Checking Hasklig installation
   stat:
-    path: "{{ local_path }}/share/fonts/OTF"
+    path: "{{ local_dir_path }}/share/fonts/OTF"
   register: hasklig_installation
 
 - name: Fetch Hasklig font
   unarchive:
     src: https://github.com/i-tu/Hasklig/releases/download/v1.2/Hasklig-1.2.zip
-    dest: "{{ local_path }}/share/fonts"
+    dest: "{{ local_dir_path }}/share/fonts"
     remote_src: yes
   when: hasklig_installation.stat.exists == false

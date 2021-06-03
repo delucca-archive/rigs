@@ -24,7 +24,7 @@
 
 - name: Ensure local src directory
   file:
-    path: "{{ install_src_path }}"
+    path: "{{ src_dir_path }}"
     state: directory
   when: not harvester_is_installed
 
@@ -86,7 +86,7 @@
 
 - name: Update harvester config
   template:
-    src: "templates/harvester-config-{{ machine_id }}.yaml.j2"
+    src: "templates/configs/{{ node_id }}.yaml.j2"
     dest: "{{ chia_harvest_manager_install_path }}/config.yaml"
   register: harvester_config
 

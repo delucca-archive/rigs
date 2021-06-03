@@ -1,5 +1,5 @@
 [Unit]
-Description=Chia Farmer
+Description=Chiabot
 Wants=network-online.target
 After=network.target network-online.target
 StartLimitIntervalSec=0
@@ -10,9 +10,9 @@ Restart=always
 RestartSec=1
 User={{ ansible_user }}
 Group={{ ansible_user }}
-WorkingDirectory={{ hpool_miner_install_path }}
-ExecStart=/usr/bin/screen -dmS chia-farmer bash -c "{{ hpool_miner_install_path }}/hpool-miner"
-ExecStop=/usr/bin/screen -S chia-farmer -X quit
+WorkingDirectory={{ chiabot_install_path }}
+ExecStart=/usr/bin/screen -dmS chiabot bash -c "{{ chiabot_install_path }}/chiabot"
+ExecStop=/usr/bin/screen -S chiabot -X quit
 
 [Install]
 WantedBy=multi-user.target

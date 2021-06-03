@@ -1,0 +1,3 @@
+#!/bin/bash
+
+cat /etc/machine-id | xxhsum -H0 | cut -d' ' -f1

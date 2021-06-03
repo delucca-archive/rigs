@@ -1,0 +1,58 @@
+---
+- name: Gathering service facts
+  service_facts:
+
+- name: Getting chiabot service status
+  set_fact:
+    chiabot_service: "{{ ansible_facts.services['chiabot.service'] | default({ 'state': 'absent' }) }}"
+
+- name: Defining if the chiabot is running
+  set_fact:
+    chiabot_is_running: "{{ chiabot_service.state == 'running' }}"
+
+- name: Fetch chiabot files
+  unarchive:
+    src: "https://github.com/joaquimguimaraes/chiabot/releases/download/{{ chiabot_version }}/chiabot-linux-amd64.tar.gz"
+    dest: /tmp/chiabot
+    remote_src: yes
+  when: not chiabot_is_running
+
+- name: Ensure chiabot installation directory exists
+  file:
+    path: "{{ chiabot_install_path }}"
+    state: directory
+  when: not chiabot_is_running
+
+- name: Copy chiabot binary to installation path
+  copy:
+    src: /tmp/chiabot/chiabot
+    dest: "{{ chiabot_install_path }}/chiabot"
+    mode: a+x
+  when: not chiabot_is_running
+
+- name: Create chiabot config
+  template:
+    src: templates/chiabot-config.json.j2
+    dest: "{{ chiabot_install_path }}/config.json"
+
+- name: Create chiabot service
+  become: yes
+  template:
+    src: templates/chiabot.service.j2
+    dest: /etc/systemd/system/chiabot.service
+  when: not chiabot_is_running
+
+- name: Configure chiabot service
+  become: yes
+  systemd:
+    name: chiabot
+    enabled: yes
+    state: started
+  when: not chiabot_is_running
+
+- name: Restart previous chiabot service
+  become: yes
+  systemd:
+    name: chiabot
+    state: reloaded
+  when: chiabot_is_running

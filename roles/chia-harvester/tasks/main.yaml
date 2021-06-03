@@ -1,3 +1,10 @@
 ---
+- name: Gather required facts
+  import_tasks: facts.yaml
+
+- name: Ensure all harvesters are mounted
+  import_tasks: storage.yaml
+  when: attached_harvester_uuids and attached_harvester_uuids | length > 0
+
 - name: Setup harvest manager
   import_tasks: manager.yaml

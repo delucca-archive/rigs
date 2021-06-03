@@ -2,9 +2,9 @@
 
 This repository aims to organize the setup automation for my personal rigs. Each rig is added to a given host group, being one of the following:
 
-* **Worker:** Allowed to code and execute projects
+* **Workstation:** Allowed to code and execute projects
 * **Farmer:** Responsible for farming Chia
-* **Plotter:** Responsible for plotting Chia
+* **Harvester:** Responsible for plotting Chia
 
 * [Table of contents](#)
   * [Install](#install)
@@ -39,11 +39,12 @@ ansible-playbook -i inventory.yaml <the-desired-playbook>
 
 * [`setup`](./setup.yaml): Setup all your hosts based on their roles
 * [`setup-farmers`](./setup-farmers.yaml): Setup only our farmer hosts
-* [`setup-plotters`](./setup-plotters.yaml): Setup only our plotter hosts
+* [`setup-harvesters`](./setup-harvesters.yaml): Setup only our harvesters hosts
+* [`setup-workstations`](./setup-workstations.yaml): Setup only our workstation hosts
 
 ## Adding a new rig
 
-The following steps are suggested for my `farmer` and `plotter` rigs. If you're launching a new `worker` rig, you should check [my Notion runbook](https://www.notion.so/odelucca/Workstation-Setup-Runbook-f19fdfa9b6e645c99fcf741cd38debaa)
+The following steps are suggested for my `farmer` and `harvester` rigs. If you're bootstrapping a new `workerstation` rig, you should check [my Notion runbook](https://www.notion.so/odelucca/Workstation-Setup-Runbook-f19fdfa9b6e645c99fcf741cd38debaa)
 
 ### 1. Get the rig IP
 

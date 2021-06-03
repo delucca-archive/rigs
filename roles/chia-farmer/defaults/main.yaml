@@ -1,1 +1,2 @@
 hpool_miner_version: v1.4.0-2
+hpool_miner_install_path: "{{ lib_dir_path }}/hpool"

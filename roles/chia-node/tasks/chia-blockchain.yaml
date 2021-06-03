@@ -16,7 +16,7 @@
 
 - name: Ensure local src directory
   file:
-    path: "{{ install_src_path }}"
+    path: "{{ src_dir_path }}"
     state: directory
   when: not chia_is_installed
 

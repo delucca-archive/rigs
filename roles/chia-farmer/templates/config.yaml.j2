@@ -1,0 +1,18 @@
+path:
+{% for farmer_xxhash in attached_farmer_xxhashes %}
+- {{ mount_dir_path }}/farmer-{{ farmer_xxhash }}
+{% endfor %}
+minerName: xch-{{ ansible_user }}-{{ node_id }}
+apiKey: {{ hpool_api_key }}
+cachePath: ""
+deviceId: ""
+extraParams: {}
+log:
+  lv: info
+  path: {{ logs_dir_path }}/hpool
+  name: miner
+url:
+  info: ""
+  submit: ""
+scanPath: true
+scanMinute: 30
