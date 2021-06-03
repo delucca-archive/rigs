@@ -4,45 +4,45 @@
 
 - name: Checking manager installation
   stat:
-    path: "{{ chia_plot_manager_install_path }}"
-  register: chia_plot_manager_installation
+    path: "{{ chia_harvest_manager_install_path }}"
+  register: chia_harvest_manager_installation
 
 - name: Checking manager venv creation
   stat:
-    path: "{{ chia_plot_manager_install_path }}/venv"
-  register: chia_plot_manager_venv
+    path: "{{ chia_harvest_manager_install_path }}/venv"
+  register: chia_harvest_manager_venv
 
 - name: Getting service status
   set_fact:
-    plotter_service: "{{ ansible_facts.services['chia-plotter.service'] | default({ 'state': 'absent' }) }}"
+    harvester_service: "{{ ansible_facts.services['chia-harvester.service'] | default({ 'state': 'absent' }) }}"
 
-- name: Defining facts regarding plotter installation
+- name: Defining facts regarding harvester installation
   set_fact:
-    plotter_is_installed: "{{ chia_plot_manager_installation.stat.exists }}"
-    plotter_venv_is_created: "{{ chia_plot_manager_venv.stat.exists }}"
-    plotter_service_is_running: "{{ plotter_service.state == 'stopped' }}"
+    harvester_is_installed: "{{ chia_harvest_manager_installation.stat.exists }}"
+    harvester_venv_is_created: "{{ chia_harvest_manager_venv.stat.exists }}"
+    harvester_service_is_running: "{{ harvester_service.state == 'stopped' }}"
 
 - name: Ensure local src directory
   file:
     path: "{{ install_src_path }}"
     state: directory
-  when: not plotter_is_installed
+  when: not harvester_is_installed
 
-- name: Fetch Swar plot manager source code
+- name: Fetch Swar harvest manager source code
   git:
     repo: https://github.com/swar/Swar-Chia-Plot-Manager.git
-    dest: "{{ chia_plot_manager_install_path }}"
-  when: not plotter_is_installed
+    dest: "{{ chia_harvest_manager_install_path }}"
+  when: not harvester_is_installed
 
 - name: Setting dependency names for Ubuntu distributions
   set_fact:
     pip_package_name: python3-pip
-  when: ansible_distribution == 'Ubuntu' and not plotter_venv_is_created
+  when: ansible_distribution == 'Ubuntu' and not harvester_venv_is_created
 
 - name: Setting dependency names for Arch distributions
   set_fact:
     pip_package_name: python-pip
-  when: ansible_distribution == 'Archlinux' and not plotter_venv_is_created
+  when: ansible_distribution == 'Archlinux' and not harvester_venv_is_created
 
 - name: Install dependencies
   become: yes
@@ -51,14 +51,14 @@
     - "{{ pip_package_name }}"
     - jq
     state: present
-  when: not plotter_venv_is_created
+  when: not harvester_venv_is_created
 
 - name: Install pip dependencies for user
   pip:
     name:
     - virtualenv
     - yq
-  when: not plotter_venv_is_created
+  when: not harvester_venv_is_created
 
 - name: Install pip dependencies for sudo
   become: yes
@@ -66,48 +66,56 @@
     name:
     - virtualenv
     - yq
-  when: not plotter_venv_is_created
+  when: not harvester_venv_is_created
 
 - name: Install requirements
   pip:
-    chdir: "{{ chia_plot_manager_install_path }}"
+    chdir: "{{ chia_harvest_manager_install_path }}"
     requirements: requirements.txt
     virtualenv: venv
     virtualenv_command: /usr/bin/python3 -m venv
-  when: not plotter_venv_is_created
+  when: not harvester_venv_is_created
 
-- name: Update plotter config
-  template:
-    src: "templates/plotter-config-{{ machine_id }}.yaml.j2"
-    dest: "{{ chia_plot_manager_install_path }}/config.yaml"
-  register: plotter_config
+- name: Install notification requirements
+  pip:
+    chdir: "{{ chia_harvest_manager_install_path }}"
+    requirements: requirements-notification.txt
+    virtualenv: venv
+    virtualenv_command: /usr/bin/python3 -m venv
+  when: not harvester_venv_is_created
 
-- name: Adds collect plotter garbage binary
+- name: Update harvester config
   template:
-    src: templates/collect-plotter-garbage.x.j2
-    dest: "{{ bin_dir_path }}/collect-plotter-garbage"
+    src: "templates/harvester-config-{{ machine_id }}.yaml.j2"
+    dest: "{{ chia_harvest_manager_install_path }}/config.yaml"
+  register: harvester_config
+
+- name: Adds collect harvester garbage binary
+  template:
+    src: templates/collect-harvester-garbage.x.j2
+    dest: "{{ bin_dir_path }}/collect-harvester-garbage"
     mode: a+x
-  when: not plotter_is_installed
+  when: not harvester_is_installed
 
-- name: Adds plotter status binary
+- name: Adds harvester status binary
   become: yes
   template:
-    src: templates/plotter-status.x.j2
-    dest: /usr/bin/plotter-status
+    src: templates/harvester-status.x.j2
+    dest: /usr/bin/harvester-status
     mode: a+x
-  when: not plotter_is_installed
+  when: not harvester_is_installed
 
-- name: Create plotter service
+- name: Create harvester service
   become: yes
   template:
-    src: templates/chia-plotter.service.j2
-    dest: /etc/systemd/system/chia-plotter.service
-  when: not plotter_service_is_running
+    src: templates/chia-harvester.service.j2
+    dest: /etc/systemd/system/chia-harvester.service
+  when: not harvester_service_is_running
 
-- name: Configure plotter service
+- name: Configure harvester service
   become: yes
   systemd:
-    name: chia-plotter
+    name: chia-harvester
     enabled: yes
     state: started
-  when: not plotter_service_is_running
+  when: not harvester_service_is_running

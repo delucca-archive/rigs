@@ -1,1 +1,1 @@
-chia_plot_manager_install_path: "{{ install_src_path }}/chia-plotter"
+chia_harvest_manager_install_path: "{{ install_src_path }}/chia-harvester"
