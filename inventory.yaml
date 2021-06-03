@@ -47,6 +47,11 @@ all:
     mount_dir_name: xch-plots-ff-0c56-d539
     fstype: ext4
 
+  - &xch_ff_plot_storage_006
+    uuid: bd7d9ce6-7bf0-41e2-877c-49b52c7011d9
+    mount_dir_name: xch-plots-ff-bd7d-11d9
+    fstype: ext4
+
   - &xch_blz_plot_storage_001
     uuid: 6f004b96-daba-4413-ab1f-fdcb2c7d956c
     mount_dir_name: xch-plots-blz-febb-348d
@@ -66,8 +71,10 @@ all:
       attached_storages:
       - *xch_ff_tmp_storage_001
       - *xch_ff_plot_storage_005
+      - *xch_ff_plot_storage_006
       farmer_plot_dirs:
       - *xch_ff_plot_storage_005
+      - *xch_ff_plot_storage_006
 
     farm_ff_001: &farm_ff_001
       machine_id: 24ece319d9f24ddca677746cfdd62477

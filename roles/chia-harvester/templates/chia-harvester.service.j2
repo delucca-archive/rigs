@@ -12,4 +12,4 @@ WorkingDirectory={{ chia_harvest_manager_install_path }}
 ExecStart=/usr/bin/screen -dmS chia-harvester bash -c "{{ bin_dir_path }}/collect-harvester-garbage; {{ chia_harvest_manager_install_path }}/venv/bin/python {{ chia_harvest_manager_install_path }}/manager.py start; {{ chia_harvest_manager_install_path }}/venv/bin/python {{ chia_harvest_manager_install_path }}/manager.py view"
 
 [Install]
-WantedBy=screen.target
+WantedBy=multi-user.target
