@@ -18,7 +18,7 @@ manager:
 
 log:
   # folder_path: This is the folder where your log files for plots will be saved.
-  folder_path: /home/delucca/.local/logs/plotter
+  folder_path: {{ logs_dir_path }}/harvester
 
 
 view:
@@ -174,13 +174,16 @@ jobs:
   #        cpu_affinity: List of cpu (or threads) to allocate for plot processes. The default example assumes you have
   #                      a hyper-threaded 4 core CPU (8 logical cores). This config will restrict plot processes to use
   #                      logical cores 0-5, leaving logical cores 6 and 7 for other processes (6 restricted, 2 free).
-  - name: xch-ff-005-0c56-d539
+  - name: harvester-{{ attached_harvester_uuid_hashmap['da0fb299-11df-4ff8-a3bb-78799a80e38b'] }}
     max_plots: 35
     farmer_public_key: a1ab315add7be3982fc9986bbbb56c757f229ec12e22c1abfeae227f70512ee8e17df4cf45a78af868e6ceee56756f9e
     pool_public_key: 8bdb3a53fd74860f4cf42f8e33938e92dac6ac805b71366c513b3e4c528b6419843ea3b21360651f0ad35b32e317cc18
-    temporary_directory: /mnt/xch-tmp-da0f-e38b
+    temporary_directory: /mnt/harvester-{{ attached_harvester_uuid_hashmap['da0fb299-11df-4ff8-a3bb-78799a80e38b'] }}
     temporary2_directory:
-    destination_directory: /mnt/xch-plots-ff-bd7d-11d9
+    destination_directory:
+    {% for farmer_xxhash in attached_farmer_xxhashes %}
+    - {{ mount_dir_path }}/farmer-{{ farmer_xxhash }}
+    {% endfor %}
     size: 32
     bitfield: true
     threads: 24
