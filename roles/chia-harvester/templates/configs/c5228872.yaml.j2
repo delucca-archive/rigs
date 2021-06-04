@@ -62,8 +62,8 @@ notifications:
   pushover_api_key: xx
   
   # TELEGRAM
-  notify_telegram: true
-  telegram_token: {{ chia_harvester_telegram_token }}
+  notify_telegram: false
+  telegram_token: xx
 
 
   # TWILIO
@@ -192,7 +192,7 @@ jobs:
     max_concurrent: 3
     max_concurrent_with_start_early: 7
     initial_delay_minutes: 0
-    stagger_minutes: 70
+    stagger_minutes: 50
     max_for_phase_1: 4
     concurrency_start_early_phase: 4
     concurrency_start_early_phase_delay: 0

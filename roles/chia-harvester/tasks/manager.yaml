@@ -90,18 +90,18 @@
     dest: "{{ chia_harvest_manager_install_path }}/config.yaml"
   register: harvester_config
 
+- name: Adds harvester binary
+  become: yes
+  template:
+    src: templates/harvester.x.j2
+    dest: /usr/bin/harvester
+    mode: a+x
+  when: not harvester_is_installed
+
 - name: Adds collect harvester garbage binary
   template:
     src: templates/collect-harvester-garbage.x.j2
     dest: "{{ bin_dir_path }}/collect-harvester-garbage"
-    mode: a+x
-  when: not harvester_is_installed
-
-- name: Adds harvester status binary
-  become: yes
-  template:
-    src: templates/harvester-status.x.j2
-    dest: /usr/bin/harvester-status
     mode: a+x
   when: not harvester_is_installed
 
@@ -119,3 +119,7 @@
     enabled: yes
     state: started
   when: not harvester_service_is_running
+
+- name: Restart harvester
+  shell: harvester restart
+  when: harvester_config.changed == true
