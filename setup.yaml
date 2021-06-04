@@ -1,4 +1,3 @@
 ---
-- import_playbook: setup-farmers.yaml
-- import_playbook: setup-harvesters.yaml
-- import_playbook: setup-workers.yaml
+- import_playbook: setup-workstation.yaml
+- import_playbook: setup-chia-nodes.yaml
