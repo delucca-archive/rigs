@@ -1,15 +1,4 @@
 ---
-- name: Gathering service facts
-  service_facts:
-
-- name: Getting farmer service status
-  set_fact:
-    farmer_service: "{{ ansible_facts.services['chia-farmer.service'] | default({ 'state': 'absent' }) }}"
-
-- name: Defining if the farmer is running
-  set_fact:
-    farmer_is_running: "{{ farmer_service.state == 'running' }}"
-
 - name: Ensure dependencies
   become: yes
   package:

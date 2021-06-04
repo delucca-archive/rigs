@@ -7,8 +7,10 @@ all:
       attached_harvester_uuids:
       - da0fb299-11df-4ff8-a3bb-78799a80e38b
       attached_farm_uuids:
-      - e62e79d9-0c57-4a72-8c6d-0aff24d749ad
       - bd7d9ce6-7bf0-41e2-877c-49b52c7011d9
+      - 01351c96-6094-431c-bdb5-2c045af3d62f
+      dettached_farm_uuids:
+      - e62e79d9-0c57-4a72-8c6d-0aff24d749ad
       
     farm_ff_001: &farm_ff_001
       ansible_host: 10.0.0.12
@@ -21,7 +23,8 @@ all:
       - 5be63090-0239-46c5-874f-b024b3def8b8
       - 0a6d118c-e880-4f3f-a5ee-818ea94de542
       - 8e3d5927-574a-4e57-9847-9cd966f3847c
-      
+      - e62e79d9-0c57-4a72-8c6d-0aff24d749ad
+      - 516ce99c-ce34-465d-85a1-05361d3e9053
       
     farm_blz_001: &farm_blz_001
       ansible_host: 10.0.0.11

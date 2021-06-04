@@ -2,35 +2,35 @@
 - name: Build attached harvester xxhashes
   shell: "echo {{ item }} | xxhsum -H0 | cut -d' ' -f1"
   with_items: "{{ attached_harvester_uuids }}"
-  when: attached_harvester_uuids and attached_harvester_uuids | length > 0
+  when: attached_harvester_uuids is defined and attached_harvester_uuids | length > 0
   register: attached_harvester_xxhash_outputs
 
 - name: Set attached harvester xxhashes fact
   set_fact:
     attached_harvester_xxhashes: "{{ attached_harvester_xxhashes | default([]) + [item.stdout] }}"
   with_items: "{{ attached_harvester_xxhash_outputs.results }}"
-  when: attached_harvester_uuids and attached_harvester_uuids | length > 0
+  when: attached_harvester_uuids is defined and attached_harvester_uuids | length > 0
 
 - name: Set attached harvester UUID hashmap fact
   set_fact:
     attached_harvester_uuid_hashmap: "{{ attached_harvester_uuid_hashmap | default({}) | combine({ item.0: item.1 }) }}"
   loop: "{{ attached_harvester_uuids | zip(attached_harvester_xxhashes) | list }}"
-  when: attached_harvester_uuids and attached_harvester_uuids | length > 0
+  when: attached_harvester_uuids is defined and attached_harvester_uuids | length > 0
 
 - name: Build attached farm xxhashes
   shell: "echo {{ item }} | xxhsum -H0 | cut -d' ' -f1"
   with_items: "{{ attached_farm_uuids }}"
-  when: attached_farm_uuids and attached_farm_uuids | length > 0
+  when: attached_farm_uuids is defined and attached_farm_uuids | length > 0
   register: attached_farm_xxhash_outputs
 
 - name: Set attached farm xxhashes fact
   set_fact:
     attached_farm_xxhashes: "{{ attached_farm_xxhashes | default([]) + [item.stdout] }}"
   with_items: "{{ attached_farm_xxhash_outputs.results }}"
-  when: attached_farm_uuids and attached_farm_uuids | length > 0
+  when: attached_farm_uuids is defined and attached_farm_uuids | length > 0
 
 - name: Set attached farm UUID hashmap fact
   set_fact:
     attached_farm_uuid_hashmap: "{{ attached_farm_uuid_hashmap | default({}) | combine({ item.0: item.1 }) }}"
   loop: "{{ attached_farm_uuids | zip(attached_farm_xxhashes) | list }}"
-  when: attached_farm_uuids and attached_farm_uuids | length > 0
+  when: attached_farm_uuids is defined and attached_farm_uuids | length > 0

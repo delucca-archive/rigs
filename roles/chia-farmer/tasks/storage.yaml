@@ -7,6 +7,7 @@
     fstype: ext4
     state: mounted
   with_items: "{{ attached_farm_uuids }}"
+  when: attached_farm_uuids is defined
 
 - name: Ensure all mounted farms are owner by host user
   become: yes
@@ -15,3 +16,14 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
   with_items: "{{ attached_farm_uuids }}"
+  when: attached_farm_uuids is defined
+
+- name: Ensure all host dettached farms are properly unmounted
+  become: yes
+  mount:
+    path: "{{ mount_dir_path }}/farm-{{ dettached_farm_uuid_hashmap[item] }}"
+    src: "UUID={{ item }}"
+    fstype: ext4
+    state: absent
+  with_items: "{{ dettached_farm_uuids }}"
+  when: dettached_farm_uuids is defined
