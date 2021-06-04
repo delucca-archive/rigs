@@ -6,21 +6,3 @@
 - name: Set node ID xxhash fact
   set_fact:
     node_id: "{{ node_id_output.stdout }}"
-
-- name: Build attached storages xxhashes
-  shell: "echo {{ item }} | xxhsum -H0 | cut -d' ' -f1"
-  with_items: "{{ attached_storage_uuids }}"
-  when: attached_storage_uuids and attached_storage_uuids | length > 0
-  register: attached_storage_xxhash_outputs
-
-- name: Set attached storages xxhashes fact
-  set_fact:
-    attached_storage_xxhashes: "{{ attached_storage_xxhashes | default([]) + [item.stdout] }}"
-  with_items: "{{ attached_storage_xxhash_outputs.results }}"
-  when: attached_storage_uuids and attached_storage_uuids | length > 0
-
-- name: Set attached storage UUID hashmap fact
-  set_fact:
-    attached_storage_uuid_hashmap: "{{ attached_storage_uuid_hashmap | default({}) | combine({ item.0: item.1 }) }}"
-  loop: "{{ attached_storage_uuids | zip(attached_storage_xxhashes) | list }}"
-  when: attached_storage_uuids and attached_storage_uuids | length > 0

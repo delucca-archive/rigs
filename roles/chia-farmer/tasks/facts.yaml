@@ -1,18 +1,18 @@
 ---
-- name: Build attached farmer xxhashes
+- name: Build attached farm xxhashes
   shell: "echo {{ item }} | xxhsum -H0 | cut -d' ' -f1"
-  with_items: "{{ attached_farmer_uuids }}"
-  when: not attached_farmer_uuid_hashmap and attached_farmer_uuids and attached_farmer_uuids | length > 0
-  register: attached_farmer_xxhash_outputs
+  with_items: "{{ attached_farm_uuids }}"
+  when: attached_farm_uuids and attached_farm_uuids | length > 0
+  register: attached_farm_xxhash_outputs
 
-- name: Set attached farmer xxhashes fact
+- name: Set attached farm xxhashes fact
   set_fact:
-    attached_farmer_xxhashes: "{{ attached_farmer_xxhashes | default([]) + [item.stdout] }}"
-  with_items: "{{ attached_farmer_xxhash_outputs.results }}"
-  when: not attached_farmer_uuid_hashmap and attached_farmer_uuids and attached_farmer_uuids | length > 0
+    attached_farm_xxhashes: "{{ attached_farm_xxhashes | default([]) + [item.stdout] }}"
+  with_items: "{{ attached_farm_xxhash_outputs.results }}"
+  when: attached_farm_uuids and attached_farm_uuids | length > 0
 
-- name: Set attached farmer UUID hashmap fact
+- name: Set attached farm UUID hashmap fact
   set_fact:
-    attached_farmer_uuid_hashmap: "{{ attached_farmer_uuid_hashmap | default({}) | combine({ item.0: item.1 }) }}"
-  loop: "{{ attached_farmer_uuids | zip(attached_farmer_xxhashes) | list }}"
-  when: not attached_farmer_uuid_hashmap and attached_farmer_uuids and attached_farmer_uuids | length > 0
+    attached_farm_uuid_hashmap: "{{ attached_farm_uuid_hashmap | default({}) | combine({ item.0: item.1 }) }}"
+  loop: "{{ attached_farm_uuids | zip(attached_farm_xxhashes) | list }}"
+  when: attached_farm_uuids and attached_farm_uuids | length > 0

@@ -181,9 +181,9 @@ jobs:
     temporary_directory: /mnt/harvester-{{ attached_harvester_uuid_hashmap['da0fb299-11df-4ff8-a3bb-78799a80e38b'] }}
     temporary2_directory:
     destination_directory:
-    {% for farmer_xxhash in attached_farmer_xxhashes %}
-    - {{ mount_dir_path }}/farmer-{{ farmer_xxhash }}
-    {% endfor %}
+{% for farm_xxhash in attached_farm_xxhashes %}
+    - {{ mount_dir_path }}/farm-{{ farm_xxhash }}
+{% endfor %}
     size: 32
     bitfield: true
     threads: 24

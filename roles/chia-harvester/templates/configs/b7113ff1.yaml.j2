@@ -180,8 +180,8 @@ jobs:
     temporary_directory: /mnt/harvester-{{ attached_harvester_uuid_hashmap['8ba3f3a0-c30e-4250-99ad-de694fd4e1be'] }}
     temporary2_directory:
     destination_directory:
-    {% for farmer_xxhash in attached_farmer_xxhashes %}
-    - {{ mount_dir_path }}/farmer-{{ farmer_xxhash }}
+    {% for farm_xxhash in attached_farm_xxhashes %}
+    - {{ mount_dir_path }}/farm-{{ farm_xxhash }}
     {% endfor %}
     size: 32
     bitfield: true
@@ -210,9 +210,9 @@ jobs:
     temporary_directory: /mnt/xch-tmp-e46d-45d1
     temporary2_directory:
     destination_directory:
-    {% for farmer_xxhash in attached_farmer_xxhashes %}
-    - {{ mount_dir_path }}/farmer-{{ farmer_xxhash }}
-    {% endfor %}
+{% for farm_xxhash in attached_farm_xxhashes %}
+    - {{ mount_dir_path }}/farm-{{ farm_xxhash }}
+{% endfor %}
     size: 32
     bitfield: true
     threads: 8

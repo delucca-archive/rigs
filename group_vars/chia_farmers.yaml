@@ -1,3 +1,4 @@
+chiabot_install_path: "{{ lib_dir_path }}/chiabot"
 hpool_api_key: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           33616636306632373639336665663936373862383562613064633662663632326337373364626330

@@ -4,8 +4,8 @@
 
 - name: Ensure all farmers are mounted
   import_tasks: storage.yaml
-  when: attached_farmer_uuids and attached_farmer_uuids | length > 0
+  when: attached_farm_uuids and attached_farm_uuids | length > 0
 
 - name: Setup Chia miner
   import_tasks: miner.yaml
-  when: attached_farmer_uuids and attached_farmer_uuids | length > 0
+  when: attached_farm_uuids and attached_farm_uuids | length > 0

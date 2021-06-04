@@ -68,5 +68,5 @@
   become: yes
   systemd:
     name: chia-farmer
-    state: reloaded
+    state: restarted
   when: farmer_is_running

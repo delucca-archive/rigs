@@ -1,6 +1,6 @@
 path:
-{% for farmer_xxhash in attached_farmer_xxhashes %}
-- {{ mount_dir_path }}/farmer-{{ farmer_xxhash }}
+{% for farm_xxhash in attached_farm_xxhashes %}
+- {{ mount_dir_path }}/farm-{{ farm_xxhash }}
 {% endfor %}
 minerName: xch-{{ ansible_user }}-{{ node_id }}
 apiKey: {{ hpool_api_key }}
