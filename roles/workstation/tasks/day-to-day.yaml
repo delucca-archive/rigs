@@ -6,6 +6,7 @@
     name:
     - discord
     - vlc
+    - yubioath-desktop
 
 - name: Check AUR dependencies
   ignore_errors: yes
