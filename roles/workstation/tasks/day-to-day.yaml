@@ -8,6 +8,7 @@
     - vlc
     - yubioath-desktop
     - gnome-shell-extensions
+    - libwnck3
 
 - name: Check AUR dependencies
   ignore_errors: yes
