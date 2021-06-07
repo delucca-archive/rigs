@@ -7,6 +7,7 @@
     - discord
     - vlc
     - yubioath-desktop
+    - gnome-shell-extensions
 
 - name: Check AUR dependencies
   ignore_errors: yes
