@@ -11,12 +11,13 @@
   with_items: *aur_packages
   when: installed_aur_packages.failed is defined and installed_aur_packages.failed == true
 
-- name: Mount Google Drive folders to Home
-  become: yes
-  template:
-    src: templates/drive-folder.mount.j2
-    dest: /etc/systemd/system/home-{{ ansible_user }}-{{ item }}.mount
-  with_items: &mounted_drive_folders
+- name: Link Google Drive folders to Home
+  file:
+    src: "{{ home_dir_path }}/Drive/{{ item }}"
+    dest: "{{ home_dir_path }}/{{ item }}"
+    force: yes
+    state: link
+  with_items:
   - Videos
   - Temporary
   - Pictures
@@ -25,26 +26,4 @@
   - Desktop
   - Archive
 
-- name: Enable systemd Google Drive folders services
-  become: yes
-  systemd:
-    name: home-{{ ansible_user }}-{{ item }}.mount
-    enabled: yes
-    state: started
-  with_items: *mounted_drive_folders
 
-- name: Ensure Google Drive folders are owner by host user
-  become: yes
-  file:
-    path: "{{ home_dir_path }}/Drive"
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-
-
-- name: Ensure Google Drive mounted folders are owner by host user
-  become: yes
-  file:
-    path: "{{ home_dir_path }}/Drive/{{ item }}"
-    owner: "{{ ansible_user }}"
-    group: "{{ ansible_user }}"
-  with_items: *mounted_drive_folders
