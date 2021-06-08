@@ -1,0 +1,56 @@
+---
+- name: Ensure src folder exists
+  file:
+    state: directory
+    path: "{{ src_dir_path }}"
+
+- name: Check WhiteSur theme installation
+  stat:
+    path: "{{ whitesur_theme_install_dir_path }}"
+  register: whitesur_theme_installation
+
+- name: Decide if WhiteSur theme is properly installed
+  set_fact:
+    whitesur_theme_is_installed: "{{ whitesur_theme_installation.stat.exists == true }}"
+
+- name: Fetch WhiteSur GTK theme
+  git:
+    repo: https://github.com/vinceliuice/WhiteSur-gtk-theme.git
+    dest: "{{ whitesur_theme_install_dir_path }}"
+  when: not whitesur_theme_is_installed
+
+- name: Install WhiteSur theme
+  shell: ./install.sh -c dark -t blue -i arch
+  args:
+    chdir: "{{ whitesur_theme_install_dir_path }}"
+
+- name: Install tweaks
+  shell: ./tweaks.sh -f -d
+  args:
+    chdir: "{{ whitesur_theme_install_dir_path }}"
+
+- name: Install sudo tweaks
+  become: yes
+  shell: ./tweaks.sh -g
+  args:
+    chdir: "{{ whitesur_theme_install_dir_path }}"
+
+- name: Check WhiteSur icon installation
+  stat:
+    path: "{{ whitesur_icon_install_dir_path }}"
+  register: whitesur_icon_installation
+
+- name: Decide if WhiteSur icon is properly installed
+  set_fact:
+    whitesur_icon_is_installed: "{{ whitesur_icon_installation.stat.exists == true }}"
+
+- name: Fetch WhiteSur icon theme
+  git:
+    repo: https://github.com/vinceliuice/WhiteSur-icon-theme.git
+    dest: "{{ whitesur_icon_install_dir_path }}"
+  when: not whitesur_icon_is_installed
+
+- name: Install WhiteSur icon theme
+  shell: ./install.sh
+  args:
+    chdir: "{{ whitesur_icon_install_dir_path }}"

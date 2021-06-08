@@ -16,3 +16,6 @@
 
 - name: Setup worker for Bud projects
   import_tasks: bud.yaml
+
+- name: Setup appearance
+  import_tasks: appearance.yaml

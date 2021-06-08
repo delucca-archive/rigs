@@ -1,0 +1,3 @@
+whitesur_version: 2021-05-05
+whitesur_theme_install_dir_path: "{{ src_dir_path }}/whitesur-gtk-theme"
+whitesur_icon_install_dir_path: "{{ src_dir_path }}/whitesur-icon-theme"
