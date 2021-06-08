@@ -73,9 +73,9 @@
     dest: "{{ home_dir_path }}/.zinit/bin"
   when: not zinit_is_installed
 
-- name: Ensure Git folder structure
+- name: Ensure Repositories folder structure
   file:
-    path: "{{ home_dir_path }}/Git"
+    path: "{{ home_dir_path }}/Repositories"
     state: directory
 
 - name: Adding user {{ ansible_user }} to Docker group

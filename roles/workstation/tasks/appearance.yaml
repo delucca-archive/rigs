@@ -25,13 +25,13 @@
     chdir: "{{ whitesur_theme_install_dir_path }}"
 
 - name: Install tweaks
-  shell: ./tweaks.sh -f -d
+  shell: ./tweaks.sh -f -d -c dark
   args:
     chdir: "{{ whitesur_theme_install_dir_path }}"
 
 - name: Install sudo tweaks
   become: yes
-  shell: ./tweaks.sh -g
+  shell: ./tweaks.sh -g -b "{{ home_dir_path }}/Pictures/Wallpapers/Witcher/The-Witcher-3-Wild-Hunt-Poster-Wallpaper,-HD-Games-4K-.jpg"
   args:
     chdir: "{{ whitesur_theme_install_dir_path }}"
 
