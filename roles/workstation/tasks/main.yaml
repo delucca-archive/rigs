@@ -11,5 +11,8 @@
 - name: Setup day-to-day
   import_tasks: day-to-day.yaml
 
+- name: Setup cloud provider
+  import_tasks: cloud.yaml
+
 - name: Setup worker for Bud projects
   import_tasks: bud.yaml
