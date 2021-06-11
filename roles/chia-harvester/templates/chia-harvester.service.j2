@@ -9,7 +9,7 @@ RemainAfterExit=yes
 User={{ ansible_user }}
 Group={{ ansible_user }}
 WorkingDirectory={{ chia_harvest_manager_install_path }}
-ExecStart=/usr/bin/screen -dmS chia-harvester bash -c "{{ bin_dir_path }}/collect-harvester-garbage; /usr/bin/harvester start; /usr/bin/harvester view"
+ExecStart=/usr/bin/screen -dmS chia-harvester bash -c "{{ bin_dir_path }}/harvester clear; {{ bin_dir_path }}/harvester launch"
 
 [Install]
 WantedBy=multi-user.target

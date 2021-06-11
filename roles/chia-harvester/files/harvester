@@ -1,0 +1,96 @@
+#!/bin/bash
+
+function help {
+  cat << EOF
+Run a Chia Harvester using madmax plotter
+
+${C_BOLD}USAGE${C_RESET}
+  ${C_UNDERLINE}${0}${C_RESET} [COMMAND] [OPTIONS]
+
+${C_BOLD}GLOBAL OPTIONS${C_RESET}
+  ${C_CYAN}-h${C_RESET} (--help)    Show this message
+  ${C_CYAN}-c${C_RESET} (--config)  Defines the absolute path to the harvester config file
+
+${C_BOLD}AVAILABLE COMMANDS${C_RESET}
+  ${C_CYAN}clean${C_RESET}          Removes all previous processes harvesters, processes and temporary files
+  ${C_CYAN}start${C_RESET}          Launch a new harvester process
+EOF
+}
+
+# Dependencies
+# -------------------------------------------------------------------------------------------------
+source <(curl -s "https://raw.githubusercontent.com/albfan/bash-ini-parser/master/bash-ini-parser")
+
+# Colors
+# -------------------------------------------------------------------------------------------------
+
+C_BOLD=$(tput bold)
+C_UNDERLINE=$(tput smul)
+C_CYAN=$(tput setaf 6)
+C_RESET=$(tput sgr0)
+
+# Static variables
+# -------------------------------------------------------------------------------------------------
+
+CURRENT_PATH=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P)
+
+# Options
+# -------------------------------------------------------------------------------------------------
+
+CONFIG_PATH="${CURRENT_PATH}/.harvesterrc"
+
+function main {
+  parse_opts "${@:2}"
+  cfg_parser "${CONFIG_PATH}"
+
+  parse_command "${1}"
+}
+
+function parse_opts {
+  for opt in "${@}"; do
+    case $opt in
+      -h|--help)
+        help
+        exit 0
+        ;;
+      -c|--config)
+        CONFIG_PATH="${opt}"
+        shift ;;
+      *)
+        echo "Unknown option: ${opt}"
+        help
+        exit 1
+        ;;
+    esac
+  done
+}
+
+function parse_command {
+  command=${1}
+  $command
+}
+
+function clean {
+  harvesters=$(get_harvesters)
+
+  for harvester in $harvesters; do
+    clean_harvester "${harvester}"
+  done
+}
+
+function get_farms {
+  echo $(compgen -A function | grep "cfg_section_farm")
+}
+
+function get_harvesters {
+  echo $(compgen -A function | grep "cfg_section_harvester")
+}
+
+function clean_harvester {
+  get_harvester_cfg="${1}"
+  $get_harvester_cfg
+
+  #find "${path}" -mindepth 1 -maxdepth 1 -exec rm -r -- {} +
+}
+
+main "${@}"

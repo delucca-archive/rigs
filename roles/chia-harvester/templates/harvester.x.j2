@@ -1,4 +1,12 @@
 #!/bin/bash
 
-cd "{{ chia_harvest_manager_install_path }}"
-{{ chia_harvest_manager_install_path }}/venv/bin/python {{ chia_harvest_manager_install_path }}/manager.py "${@}"
+function help {
+  cat << EOF
+Run a Distributed DCGAN experiment
+usage: $0 [OPTIONS]
+    -h --help            Show this message
+    -m --main-node-ip    Defines the main-node IP address
+    -n --num-nodes       Defines the number of nodes
+EOF
+}
+
