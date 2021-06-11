@@ -19,6 +19,8 @@ EOF
 
 # Dependencies
 # -------------------------------------------------------------------------------------------------
+
+source <(curl -s "https://raw.githubusercontent.com/delucca/shell-functions/1.0.1/modules/feedback.sh")
 source <(curl -s "https://raw.githubusercontent.com/albfan/bash-ini-parser/master/bash-ini-parser")
 
 # Colors
@@ -32,7 +34,7 @@ C_RESET=$(tput sgr0)
 # Static variables
 # -------------------------------------------------------------------------------------------------
 
-CURRENT_PATH=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 ; pwd -P)
+CURRENT_PATH=$(cd -- "$(dirname "$0")" >/dev/null 2>&1 || throw_error "Can't open harvester directory" ; pwd -P)
 
 # Options
 # -------------------------------------------------------------------------------------------------
@@ -79,18 +81,20 @@ function clean {
 }
 
 function get_farms {
-  echo $(compgen -A function | grep "cfg_section_farm")
+  compgen -A function | grep "cfg_section_farm"
 }
 
 function get_harvesters {
-  echo $(compgen -A function | grep "cfg_section_harvester")
+  compgen -A function | grep "cfg_section_harvester"
 }
 
 function clean_harvester {
   get_harvester_cfg="${1}"
   $get_harvester_cfg
 
+  echo "${path}"
   #find "${path}" -mindepth 1 -maxdepth 1 -exec rm -r -- {} +
+  # TODO
 }
 
 main "${@}"
