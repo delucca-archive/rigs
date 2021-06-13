@@ -26,4 +26,3 @@
 
 - name: Setup Chia miner
   import_tasks: miner.yaml
-  when: attached_farm_uuids is defined

@@ -37,13 +37,14 @@
   template:
     src: templates/config.yaml.j2
     dest: "{{ hpool_miner_install_path }}/config.yaml"
+  when: attached_farm_uuids is defined
 
 - name: Create farmer service
   become: yes
   template:
     src: templates/chia-farmer.service.j2
     dest: /etc/systemd/system/chia-farmer.service
-  when: not farmer_is_running
+  when: not farmer_is_running and attached_farm_uuids is defined
 
 - name: Configure farmer service
   become: yes
@@ -51,11 +52,19 @@
     name: chia-farmer
     enabled: yes
     state: started
-  when: not farmer_is_running
+  when: not farmer_is_running and attached_farm_uuids is defined
 
 - name: Restart previous farmer service
   become: yes
   systemd:
     name: chia-farmer
     state: restarted
-  when: farmer_is_running
+  when: farmer_is_running and attached_farm_uuids is defined
+
+- name: Stop farmer service if there is no attached farm
+  become: yes
+  systemd:
+    name: chia-farmer
+    enabled: no
+    state: stopped
+  when: not attached_farm_uuids is defined
