@@ -26,7 +26,7 @@
     fstype: ext4
     state: mounted
   with_items: "{{ attached_farm_uuids }}"
-  when: attached_harvester_uuids is defined
+  when: attached_farm_uuids is defined
 
 - name: Ensure all mounted farms are owner by host user
   become: yes
@@ -35,4 +35,4 @@
     owner: "{{ ansible_user }}"
     group: "{{ ansible_user }}"
   with_items: "{{ attached_farm_uuids }}"
-  when: attached_harvester_uuids is defined
+  when: attached_farm_uuids is defined

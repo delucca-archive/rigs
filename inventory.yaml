@@ -6,11 +6,10 @@ all:
       ansible_user: delucca
       attached_harvester_uuids:
       - da0fb299-11df-4ff8-a3bb-78799a80e38b
-      attached_farm_uuids:
-      - 516ce99c-ce34-465d-85a1-05361d3e9053
+        # attached_farm_uuids:
+        # - 516ce99c-ce34-465d-85a1-05361d3e9053
         # dettached_farm_uuids:
-        # - bd7d9ce6-7bf0-41e2-877c-49b52c7011d9
-        # - 01351c96-6094-431c-bdb5-2c045af3d62f
+        # - 516ce99c-ce34-465d-85a1-05361d3e9053
       
     farm_ff_001: &farm_ff_001
       ansible_host: 10.0.0.12
@@ -26,6 +25,7 @@ all:
       - e62e79d9-0c57-4a72-8c6d-0aff24d749ad
       - bd7d9ce6-7bf0-41e2-877c-49b52c7011d9
       - 01351c96-6094-431c-bdb5-2c045af3d62f
+      - 516ce99c-ce34-465d-85a1-05361d3e9053
       
     farm_blz_001: &farm_blz_001
       ansible_host: 10.0.0.11
