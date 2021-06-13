@@ -14,35 +14,36 @@
 
 - name: Getting service status
   set_fact:
-    harvester_service: "{{ ansible_facts.services['chia-harvester.service'] | default({ 'state': 'absent' }) }}"
+    harvest_manager_service: "{{ ansible_facts.services['chia-harvest-manager.service'] | default({ 'state': 'absent' }) }}"
 
-- name: Defining facts regarding harvester installation
+- name: Defining facts regarding harvest manager installation
   set_fact:
-    harvester_is_installed: "{{ chia_harvest_manager_installation.stat.exists }}"
-    harvester_venv_is_created: "{{ chia_harvest_manager_venv.stat.exists }}"
-    harvester_service_is_running: "{{ harvester_service.state == 'stopped' }}"
+    harvest_manager_is_installed: "{{ chia_harvest_manager_installation.stat.exists }}"
+    harvest_manager_venv_is_created: "{{ chia_harvest_manager_venv.stat.exists }}"
+    harvest_manager_service_is_running: "{{ harvest_manager_service.state == 'stopped' }}"
 
 - name: Ensure local src directory
   file:
     path: "{{ src_dir_path }}"
     state: directory
-  when: not harvester_is_installed
+  when: not harvest_manager_is_installed
 
 - name: Fetch Swar harvest manager source code
   git:
-    repo: https://github.com/swar/Swar-Chia-Plot-Manager.git
+    repo: https://github.com/delucca-workspaces/Swar-Chia-Plot-Manager.git
     dest: "{{ chia_harvest_manager_install_path }}"
-  when: not harvester_is_installed
+    version: feature/madmax
+  when: not harvest_manager_is_installed
 
 - name: Setting dependency names for Ubuntu distributions
   set_fact:
     pip_package_name: python3-pip
-  when: ansible_distribution == 'Ubuntu' and not harvester_venv_is_created
+  when: ansible_distribution == 'Ubuntu' and not harvest_manager_venv_is_created
 
 - name: Setting dependency names for Arch distributions
   set_fact:
     pip_package_name: python-pip
-  when: ansible_distribution == 'Archlinux' and not harvester_venv_is_created
+  when: ansible_distribution == 'Archlinux' and not harvest_manager_venv_is_created
 
 - name: Install dependencies
   become: yes
@@ -51,14 +52,14 @@
     - "{{ pip_package_name }}"
     - jq
     state: present
-  when: not harvester_venv_is_created
+  when: not harvest_manager_venv_is_created
 
 - name: Install pip dependencies for user
   pip:
     name:
     - virtualenv
     - yq
-  when: not harvester_venv_is_created
+  when: not harvest_manager_venv_is_created
 
 - name: Install pip dependencies for sudo
   become: yes
@@ -66,7 +67,7 @@
     name:
     - virtualenv
     - yq
-  when: not harvester_venv_is_created
+  when: not harvest_manager_venv_is_created
 
 - name: Install requirements
   pip:
@@ -74,7 +75,7 @@
     requirements: requirements.txt
     virtualenv: venv
     virtualenv_command: /usr/bin/python3 -m venv
-  when: not harvester_venv_is_created
+  when: not harvest_manager_venv_is_created
 
 - name: Install notification requirements
   pip:
@@ -82,44 +83,44 @@
     requirements: requirements-notification.txt
     virtualenv: venv
     virtualenv_command: /usr/bin/python3 -m venv
-  when: not harvester_venv_is_created
+  when: not harvest_manager_venv_is_created
 
-- name: Update harvester config
+- name: Update harvest manager config
   template:
     src: "templates/configs/{{ node_id }}.yaml.j2"
     dest: "{{ chia_harvest_manager_install_path }}/config.yaml"
-  register: harvester_config
+  register: harvest_manager_config
 
-- name: Adds harvester binary
+- name: Adds harvest manager binary
   become: yes
   template:
-    src: templates/harvester.x.j2
-    dest: /usr/bin/harvester
+    src: templates/harvest-manager.x.j2
+    dest: /usr/bin/harvest-manager
     mode: a+x
-  when: not harvester_is_installed
+  when: not harvest_manager_is_installed
 
 - name: Adds collect harvester garbage binary
   template:
     src: templates/collect-harvester-garbage.x.j2
     dest: "{{ bin_dir_path }}/collect-harvester-garbage"
     mode: a+x
-  when: not harvester_is_installed
+  when: not harvest_manager_is_installed
 
-- name: Create harvester service
+- name: Create harvest manager service
   become: yes
   template:
-    src: templates/chia-harvester.service.j2
-    dest: /etc/systemd/system/chia-harvester.service
-  when: not harvester_service_is_running
+    src: templates/chia-harvest-manager.service.j2
+    dest: /etc/systemd/system/chia-harvest-manager.service
+  when: not harvest_manager_service_is_running
 
-- name: Configure harvester service
+- name: Configure harvest manager service
   become: yes
   systemd:
-    name: chia-harvester
+    name: chia-harvest-manager
     enabled: yes
     state: started
-  when: not harvester_service_is_running
+  when: not harvest_manager_service_is_running
 
-- name: Restart harvester
-  shell: harvester restart
-  when: harvester_config.changed == true
+- name: Restart harvest manager
+  shell: harvest-manager restart
+  when: harvest_manager_config.changed == true

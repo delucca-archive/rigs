@@ -6,5 +6,8 @@
   import_tasks: storage.yaml
   when: attached_harvester_uuids is defined and attached_harvester_uuids | length > 0
 
-- name: Setup harvest manager
-  import_tasks: manager.yaml
+- name: Setup harvester
+  import_tasks: harvester.yaml
+
+  #- name: Setup harvest manager
+  #import_tasks: manager.yaml

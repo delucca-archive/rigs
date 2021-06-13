@@ -1,1 +1,3 @@
-chia_harvest_manager_install_path: "{{ src_dir_path }}/chia-harvester"
+chia_harvester_install_path: "{{ lib_dir_path }}/chia-harvester"
+chia_harvester_src_path: "{{ src_dir_path }}/chia-harvester"
+chia_harvest_manager_install_path: "{{ src_dir_path }}/chia-harvest-manager"

@@ -1,0 +1,112 @@
+---
+- name: Checking harvester installation
+  stat:
+    path: "{{ chia_harvester_install_path }}"
+  register: chia_harvester_installation
+
+- name: Checking harvester source files
+  stat:
+    path: "{{ chia_harvester_src_path }}"
+  register: chia_harvester_src_files
+
+- name: Defining facts regarding harvester installation
+  set_fact:
+    harvester_is_cloned: "{{ chia_harvester_src_files.stat.exists }}"
+    harvester_is_installed: "{{ chia_harvester_installation.stat.exists }}"
+
+- name: Ensure local src directory
+  file:
+    path: "{{ src_dir_path }}"
+    state: directory
+  when: not harvester_is_cloned
+
+- name: Ensure local lib directory
+  file:
+    path: "{{ lib_dir_path }}"
+    state: directory
+  when: not harvester_is_installed
+
+- name: Fetch Madmax plotter
+  git:
+    repo: https://github.com/madMAx43v3r/chia-plotter.git
+    dest: "{{ chia_harvester_src_path }}"
+  when: not harvester_is_cloned
+
+- name: Initialize submodules
+  command: git submodule update --init
+  args:
+    chdir: "{{ chia_harvester_src_path }}"
+  when: not harvester_is_installed
+
+- name: Ensure global compile dependencies
+  become: yes
+  package:
+    name:
+    - cmake
+  when: not harvester_is_installed
+
+- name: Ensure Arch compile dependencies
+  become: yes
+  package:
+    name:
+    - gcc10
+    - gmp
+    - libsodium
+  when: not harvester_is_installed and ansible_distribution == 'Archlinux'
+
+- name: Ensure Ubuntu compile dependencies
+  become: yes
+  package:
+    name:
+    - g++
+    - libsodium-dev
+    - libgmp3-dev
+  when: not harvester_is_installed and ansible_distribution == 'Ubuntu'
+
+- name: Check AUR dependencies
+  ignore_errors: yes
+  shell: "pacman -Qs {{ item }}"
+  with_items: &aur_packages
+  - libgmp-static
+  - libsodium-static
+  register: installed_aur_packages
+  when: not harvester_is_installed and ansible_distribution == 'Archlinux'
+
+- name: Install AUR dependencies
+  command: "yay -S --noconfirm {{ item }}"
+  with_items: *aur_packages
+  when: not harvester_is_installed and installed_aur_packages.failed is defined and installed_aur_packages.failed == true and ansible_distribution == 'Archlinux'
+
+- name: Clear previous installations
+  shell: ./clean_all.sh
+  args:
+    chdir: "{{ chia_harvester_src_path }}"
+  when: not harvester_is_installed
+
+- name: Compile Madmax plotter
+  shell: ./make_devel.sh
+  args:
+    chdir: "{{ chia_harvester_src_path }}"
+  environment:
+    CC: gcc-10
+    CXX: g++-10
+  when: not harvester_is_installed and ansible_distribution == 'Archlinux'
+
+- name: Compile Madmax plotter
+  shell: ./make_devel.sh
+  args:
+    chdir: "{{ chia_harvester_src_path }}"
+  when: not harvester_is_installed and ansible_distribution == 'Ubuntu'
+
+- name: Move compiled files
+  copy:
+    src: "{{ chia_harvester_src_path }}/build"
+    dest: "{{ chia_harvester_install_path }}"
+  when: not harvester_is_installed
+
+- name: Link binary
+  file:
+    src: "{{ chia_harvester_install_path }}/chia_plot"
+    dest: "{{ bin_dir_path }}/chia_plot"
+    state: link
+  when: not harvester_is_installed
