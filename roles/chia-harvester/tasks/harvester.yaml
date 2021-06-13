@@ -100,8 +100,9 @@
 
 - name: Move compiled files
   copy:
-    src: "{{ chia_harvester_src_path }}/build"
-    dest: "{{ chia_harvester_install_path }}"
+    src: "{{ chia_harvester_src_path }}/build/"
+    dest: "{{ chia_harvester_install_path }}/"
+    remote_src: yes
   when: not harvester_is_installed
 
 - name: Link binary

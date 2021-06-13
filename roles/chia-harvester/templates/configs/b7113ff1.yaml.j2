@@ -4,7 +4,7 @@
 #   LINUX EXAMPLE: /usr/lib/chia-blockchain/resources/app.asar.unpacked/daemon/chia
 #  LINUX2 EXAMPLE: /home/swar/chia-blockchain/venv/bin/chia
 #  MAC OS EXAMPLE: /Applications/Chia.app/Contents/Resources/app.asar.unpacked/daemon/chia
-chia_location: /home/ff-farmer/.local/src/bin/chia_plot
+chia_location: /home/ff-farmer/.local/bin/chia_plot
 backend: madmax
 
 manager:
@@ -178,11 +178,11 @@ jobs:
     max_plots: 35
     farmer_public_key: a1ab315add7be3982fc9986bbbb56c757f229ec12e22c1abfeae227f70512ee8e17df4cf45a78af868e6ceee56756f9e
     pool_public_key: 8bdb3a53fd74860f4cf42f8e33938e92dac6ac805b71366c513b3e4c528b6419843ea3b21360651f0ad35b32e317cc18
-    temporary_directory: /mnt/harvester-{{ attached_harvester_uuid_hashmap['8ba3f3a0-c30e-4250-99ad-de694fd4e1be'] }}
+    temporary_directory: /mnt/harvester-{{ attached_harvester_uuid_hashmap['8ba3f3a0-c30e-4250-99ad-de694fd4e1be'] }}/
     temporary2_directory:
     destination_directory:
 {% for farm_xxhash in attached_farm_xxhashes %}
-    - {{ mount_dir_path }}/farm-{{ farm_xxhash }}
+    - {{ mount_dir_path }}/farm-{{ farm_xxhash }}/
 {% endfor %}
     size: 32
     bitfield: true
@@ -208,11 +208,11 @@ jobs:
     max_plots: 35
     farmer_public_key: a1ab315add7be3982fc9986bbbb56c757f229ec12e22c1abfeae227f70512ee8e17df4cf45a78af868e6ceee56756f9e
     pool_public_key: 8bdb3a53fd74860f4cf42f8e33938e92dac6ac805b71366c513b3e4c528b6419843ea3b21360651f0ad35b32e317cc18
-    temporary_directory: /mnt/harvester-{{ attached_harvester_uuid_hashmap['e46dc385-0b2a-4249-8cdf-709715f245d1'] }}
+    temporary_directory: /mnt/harvester-{{ attached_harvester_uuid_hashmap['e46dc385-0b2a-4249-8cdf-709715f245d1'] }}/
     temporary2_directory:
     destination_directory:
 {% for farm_xxhash in attached_farm_xxhashes %}
-    - {{ mount_dir_path }}/farm-{{ farm_xxhash }}
+    - {{ mount_dir_path }}/farm-{{ farm_xxhash }}/
 {% endfor %}
     size: 32
     bitfield: true

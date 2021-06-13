@@ -9,5 +9,5 @@
 - name: Setup harvester
   import_tasks: harvester.yaml
 
-  #- name: Setup harvest manager
-  #import_tasks: manager.yaml
+- name: Setup harvest manager
+  import_tasks: manager.yaml
