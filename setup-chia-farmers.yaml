@@ -2,5 +2,6 @@
 - hosts: chia_farmers
   roles:
   - common
+  - storage
   - chia-node
   - chia-farmer

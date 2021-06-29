@@ -2,5 +2,6 @@
 - hosts: chia_harvesters
   roles:
   - common
+  - storage
   - chia-node
   - chia-harvester

@@ -1,0 +1,3 @@
+---
+- name: Setup Flax Blockchain
+  import_tasks: flax-blockchain.yaml

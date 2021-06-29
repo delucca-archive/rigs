@@ -42,7 +42,7 @@
   shell: "{{ chia_bin }} keys show | grep \"Fingerprint\" | cut -d' ' -f2"
   register: chia_keypair_host_fingerprint
 
-- name: Defining if Chia Blockchain is already installed
+- name: Defining if Chia mnemonics are imported
   set_fact: chia_keypair_is_loaded={{ chia_keypair_host_fingerprint == chia_keypair_desired_fingerprint }}
 
 - name: Init Chia mainnet

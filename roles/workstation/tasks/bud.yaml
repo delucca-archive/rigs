@@ -6,6 +6,7 @@
     name:
     - postgresql
     - dbeaver
+    - helm
 
 - name: Ensure PostgreSQL owns it's directory
   become: yes

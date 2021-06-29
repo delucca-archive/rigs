@@ -1,0 +1,102 @@
+---
+- name: Ensure dependencies
+  become: yes
+  package:
+    name:
+    - screen
+
+- name: Checking Flax Blockchain installation path
+  stat:
+    path: "{{ flax_install_path }}"
+  register: flax_installation
+
+- name: Defining if Flax Blockchain is installed
+  set_fact:
+    flax_is_installed: "{{ flax_installation.stat.exists }}"
+
+- name: Ensure local src directory
+  file:
+    path: "{{ src_dir_path }}"
+    state: directory
+  when: not flax_is_installed
+
+- name: Fetch Flax Blockchain source code
+  git:
+    repo: https://github.com/Flax-Network/flax-blockchain.git
+    dest: "{{ flax_install_path }}"
+  when: not flax_is_installed
+
+- name: Ensure install script is executable
+  file:
+    dest: "{{ flax_install_path }}/install.sh"
+    mode: a+x
+  when: not flax_is_installed
+
+- name: Install Flax Blockchain
+  shell: "./install.sh"
+  args:
+    chdir: "{{ flax_install_path }}"
+  when: not flax_is_installed
+
+- name: Checking Flax keypair
+  shell: "{{ flax_bin }} keys show | grep \"Fingerprint\" | cut -d' ' -f2"
+  register: flax_keypair_host_fingerprint
+
+- name: Defining if Chia mnemonics are imported to Flax
+  set_fact: flax_keypair_is_loaded={{ flax_keypair_host_fingerprint == flax_keypair_desired_fingerprint }}
+
+- name: Init Flax mainnet
+  command: "{{ flax_bin }} init"
+  when: not flax_is_installed
+
+- name: Copy Flax keypair temporary file
+  copy:
+    src: files/chia-mnemonics.txt
+    dest: /tmp/chia-mnemonics.txt
+    decrypt: yes
+  when: not flax_keypair_is_loaded
+
+- name: Add Flax keypair
+  command: "{{ flax_bin }} keys add -f /tmp/chia-mnemonics.txt"
+  when: not flax_keypair_is_loaded
+
+- name: Remove Chia keypair temporary file
+  file:
+    path: /tmp/chia-mnemonics.txt
+    state: absent
+  when: not flax_keypair_is_loaded
+
+- name: Add Flax plots dir
+  command: "{{ flax_bin }} plots add -d {{ mount_dir_path }}/farm-{{ item }}"
+  with_items: "{{ attached_farm_xxhashes }}"
+
+- name: Checking Flax Node service path
+  stat:
+    path: /etc/systemd/system/flax-node.service
+  register: chia_node_service
+
+- name: Gathering service facts
+  service_facts:
+
+- name: Getting Flax node service status
+  set_fact:
+    flax_node_service: "{{ ansible_facts.services['flax-node.service'] | default({ 'state': 'absent' }) }}"
+
+- name: Defining if the Flax node is running
+  set_fact:
+    flax_node_is_running: "{{ flax_node_service.state == 'running' }}"
+
+- name: Create node service
+  become: yes
+  template:
+    src: templates/flax-node.service.j2
+    dest: /etc/systemd/system/flax-node.service
+  when: not flax_node_is_running
+
+- name: Configure node service
+  become: yes
+  systemd:
+    name: flax-node
+    enabled: yes
+    state: started
+  when: not flax_node_is_running

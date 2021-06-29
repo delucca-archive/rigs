@@ -1,0 +1,6 @@
+---
+- hosts: flax_farmers
+  roles:
+  - common
+  - storage
+  - flax-farmer

@@ -42,6 +42,7 @@ ansible-playbook -i inventory.yaml <the-desired-playbook>
 * [`setup-chia-farmers`](./setup-chia-farmers.yaml): Setup only our Chia farmer hosts
 * [`setup-chia-harvesters`](./setup-chia-harvesters.yaml): Setup only our Chia harvesters hosts
 * [`setup-chia-nodes`](./setup-chia-nodes.yaml): Setup all our Chia nodes
+* [`setup-flax-farmers`](./setup-flax-farmers.yaml): Setup only our Flax farmer hosts
 
 ## Adding a new rig
 

@@ -17,12 +17,5 @@
     state: stopped
   when: farmer_is_running
 
-- name: Gather required facts
-  import_tasks: facts.yaml
-
-- name: Ensure all farmers are mounted
-  import_tasks: storage.yaml
-  when: attached_farm_uuids is defined or dettached_farm_uuids is defined
-
 - name: Setup Chia miner
   import_tasks: miner.yaml

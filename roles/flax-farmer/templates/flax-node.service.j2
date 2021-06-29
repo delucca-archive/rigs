@@ -1,0 +1,17 @@
+[Unit]
+Description=Starts Flax Node
+Wants=network-online.target
+After=network.target network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=forking
+Restart=always
+RestartSec=1
+User={{ ansible_user }}
+Group={{ ansible_user }}
+ExecStart=/usr/bin/env PATH={{ flax_install_path }}/venv/bin:$PATH flax start all
+ExecStop=/usr/bin/env PATH={{ flax_install_path }}/venv/bin:$PATH flax stop all -d
+
+[Install]
+WantedBy=multi-user.target

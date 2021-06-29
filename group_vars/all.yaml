@@ -8,4 +8,7 @@ logs_dir_path: "{{ local_dir_path }}/logs"
 chia_install_path: "{{ src_dir_path }}/chia-blockchain"
 chia_bin: "{{ chia_install_path }}/venv/bin/chia"
 
+flax_install_path: "{{ src_dir_path }}/flax-blockchain"
+flax_bin: "{{ flax_install_path }}/venv/bin/flax"
+
 mount_dir_path: /mnt

@@ -1,0 +1,6 @@
+---
+- name: Gather required facts
+  import_tasks: facts.yaml
+
+- name: Ensure all storages are mounted
+  import_tasks: mount.yaml
