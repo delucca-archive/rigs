@@ -1,0 +1,3 @@
+---
+- import_playbook: setup-chia-farmers.yaml
+- import_playbook: setup-flax-farmers.yaml

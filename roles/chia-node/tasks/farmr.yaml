@@ -1,0 +1,89 @@
+---
+- name: Getting farmr installation status
+  stat:
+    path: "{{ farmr_install_path }}"
+  register: farmr_installation
+
+- name: Defining if the farmr is installed
+  set_fact:
+    farmr_is_installed: "{{ farmr_installation.stat.exists == true }}"
+
+- name: Ensure farmr tmp directory exists
+  file:
+    path: /tmp/farmr
+    state: directory
+  when: not farmr_is_installed
+
+- name: Fetch farmr files
+  unarchive:
+    src: "https://github.com/joaquimguimaraes/farmr/releases/download/{{ farmr_version }}/farmr-linux-x86_64.tar.gz"
+    dest: /tmp/farmr
+    remote_src: yes
+  when: not farmr_is_installed
+
+- name: Ensure farmr installation directory exists
+  file:
+    path: "{{ farmr_install_path }}"
+    state: directory
+  when: not farmr_is_installed
+
+- name: Copy farmr binary to installation path
+  copy:
+    src: /tmp/farmr/farmr
+    dest: "{{ farmr_install_path }}/farmr"
+    mode: a+x
+    remote_src: true
+  when: not farmr_is_installed
+
+- name: Ensure required folders exists
+  file:
+    path: "{{ farmr_install_path }}/{{ item }}"
+    state: directory
+  with_items:
+  - blockchain
+  - config
+  when: not farmr_is_installed
+
+- name: Update farmr xch config
+  template:
+    src: templates/farmr-config.json.j2
+    dest: "{{ farmr_install_path }}/config/config-xch.json"
+
+- name: Adds xch farmr xch config
+  copy:
+    src: files/farmr-xch.json
+    dest: "{{ farmr_install_path }}/blockchain/xch.json"
+  when: not farmr_is_installed
+
+- name: Gathering service facts
+  service_facts:
+
+- name: Getting farmr service status
+  set_fact:
+    farmr_service: "{{ ansible_facts.services['farmr.service'] | default({ 'state': 'absent' }) }}"
+
+- name: Defining if farmr is running
+  set_fact:
+    farmr_is_running: "{{ farmr_service.state == 'running' }}"
+
+- name: Create farmr service
+  become: yes
+  template:
+    src: templates/farmr.service.j2
+    dest: /etc/systemd/system/farmr.service
+  when: not farmr_is_running
+
+- name: Configure farmr service
+  become: yes
+  systemd:
+    name: farmr
+    enabled: yes
+    state: started
+  when: not farmr_is_running
+
+- name: Restart previous farmr service
+  become: yes
+  systemd:
+    name: farmr
+    state: restarted
+  when: farmr_is_running

@@ -1,3 +1,6 @@
 ---
 - name: Setup Flax Blockchain
   import_tasks: flax-blockchain.yaml
+
+- name: Setup Farmr
+  import_tasks: farmr.yaml

@@ -1,17 +1,16 @@
 all:
   hosts:
-    control_node: &control_node
+    beluga: &beluga
+      node_id: beluga
       ansible_connection: local
       ansible_python_interpreter: "{{ ansible_playbook_python }}"
       ansible_user: delucca
       attached_harvester_uuids:
       - da0fb299-11df-4ff8-a3bb-78799a80e38b
-      attached_farm_uuids:
-      - 7f591d27-836d-49a3-8ff0-e0b3be26d47c
-        # dettached_farm_uuids:
-        # - 516ce99c-ce34-465d-85a1-05361d3e9053
+        #dettached_farm_uuids:
       
-    farm_ff_001: &farm_ff_001
+    orca: &orca
+      node_id: orca
       ansible_host: 10.0.0.9
       ansible_user: ff-farmer
       attached_harvester_uuids:
@@ -28,7 +27,8 @@ all:
       - 516ce99c-ce34-465d-85a1-05361d3e9053
       - c1838f2a-6dd6-40d5-b137-512f3274cd32
       
-    farm_blz_001: &farm_blz_001
+    vaquita: &vaquita
+      node_id: vaquita
       ansible_host: 10.0.0.10
       ansible_user: blz-farmer
       attached_harvester_uuids:
@@ -37,26 +37,27 @@ all:
       - 6f004b96-daba-4413-ab1f-fdcb2c7d956c
       - 2b6f31f0-1e33-4f5c-8c30-e875c27ae2ff
       - 25e760f4-e4c5-456a-b17b-89f051ed9fc3
+      - 7f591d27-836d-49a3-8ff0-e0b3be26d47c
       - fdaeb4bd-0019-44e5-86a1-a25a805ed5fe
       
 workstations:
   hosts:
-    control_node: *control_node
+    beluga: *beluga
 
 chia_farmers:
   hosts:
-    control_node: *control_node
-    farm_ff_001: *farm_ff_001
-    farm_blz_001: *farm_blz_001
+    beluga: *beluga
+    orca: *orca
+    vaquita: *vaquita
 
 chia_harvesters:
   hosts:
-    control_node: *control_node
-    farm_ff_001: *farm_ff_001
-    farm_blz_001: *farm_blz_001
+    beluga: *beluga
+    orca: *orca
+    vaquita: *vaquita
 
 flax_farmers:
   hosts:
-    control_node: *control_node
-    #farm_ff_001: *farm_ff_001
-    #farm_blz_001: *farm_blz_001
+    beluga: *beluga
+    orca: *orca
+    vaquita: *vaquita

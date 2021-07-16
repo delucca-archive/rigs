@@ -1,0 +1,18 @@
+[Unit]
+Description=Farmr
+Wants=network-online.target
+After=network.target network-online.target
+StartLimitIntervalSec=0
+
+[Service]
+Type=forking
+Restart=always
+RestartSec=1
+User={{ ansible_user }}
+Group={{ ansible_user }}
+WorkingDirectory={{ farmr_install_path }}
+ExecStart=/usr/bin/screen -dmS farmr bash -c "source {{ chia_harvest_manager_install_path }}/venv/bin/activate; {{ farmr_install_path }}/farmr hpool"
+ExecStop=/usr/bin/screen -S farmr -X quit
+
+[Install]
+WantedBy=multi-user.target

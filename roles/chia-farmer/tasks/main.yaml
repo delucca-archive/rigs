@@ -2,20 +2,13 @@
 - name: Gathering service facts
   service_facts:
 
-- name: Getting farmer service status
+- name: Getting farmer services status
   set_fact:
     farmer_service: "{{ ansible_facts.services['chia-farmer.service'] | default({ 'state': 'absent' }) }}"
 
-- name: Defining if the farmer is running
+- name: Defining if the farmers are running
   set_fact:
-    farmer_is_running: "{{ farmer_service.state == 'running' }}"
-
-- name: Stops running farmer
-  become: yes
-  systemd:
-    name: chia-farmer
-    state: stopped
-  when: farmer_is_running
+    farmer_is_running: "{{ chia_farmer_service.state == 'running' }}"
 
 - name: Setup Chia miner
   import_tasks: miner.yaml

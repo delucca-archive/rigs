@@ -1,4 +1,3 @@
-chiabot_install_path: "{{ lib_dir_path }}/chiabot"
 chia_harvester_telegram_token: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           36633036383034613631633034653861646461376662626237306234306131313065626332396130

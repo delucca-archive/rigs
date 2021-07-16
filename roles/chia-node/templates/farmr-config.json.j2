@@ -1,19 +1,23 @@
 [
   {
-    "Name": "xch-{{ ansible_user }}-{{ node_id }}",
+    "Name": "{{ node_id }}",
     "Currency": "BRL",
     "Show Farmed XCH": true,
     "Show Wallet Balance": false,
+    "Show Hardware Info": true,
     "Block Notifications": true,
     "Plot Notifications": true,
     "Hard Drive Notifications": true,
     "Offline Notifications": true,
     "Farm Status Notifications": true,
     "Parse Logs": false,
-    "Number of Discord Users": 1,
+    "Number of Discord Users": 3,
     "Public API": false,
     "Swar's Chia Plot Manager Path": "{{ src_dir_path }}/chia-harvest-manager",
+    "Cold Wallet Address": "",
+    "Send Cold Wallet Balance Notifications": true,
     "chiaPath": "{{ src_dir_path }}/chia-blockchain",
-    "HPool Directory": "{{ lib_dir_path }}/chia-farmer"
+    "HPool Directory": "{{ lib_dir_path }}/chia-farmer",
+    "HPool Auth Token": "{{ hpool_auth_token }}"
   }
 ]

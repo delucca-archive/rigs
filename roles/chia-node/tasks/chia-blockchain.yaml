@@ -38,6 +38,16 @@
     chdir: "{{ chia_install_path }}"
   when: not chia_is_installed
 
+- name: Configure Chia alias
+  lineinfile:
+    path: "{{ home_dir_path }}/.bashrc"
+    line: "alias chia='{{ chia_bin }}'"
+    owner: "{{ ansible_user }}"
+    regexp: "^alias chia='{{ chia_bin }}'$"
+    state: present
+    insertafter: EOF
+    create: True
+
 - name: Checking Chia keypair
   shell: "{{ chia_bin }} keys show | grep \"Fingerprint\" | cut -d' ' -f2"
   register: chia_keypair_host_fingerprint

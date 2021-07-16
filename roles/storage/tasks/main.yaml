@@ -2,5 +2,48 @@
 - name: Gather required facts
   import_tasks: facts.yaml
 
+- name: Gathering service facts
+  service_facts:
+
+- name: Getting farmer services status
+  set_fact:
+    chia_farmer_service: "{{ ansible_facts.services['chia-farmer.service'] | default({ 'state': 'absent' }) }}"
+    flax_farmer_service: "{{ ansible_facts.services['flax-node.service'] | default({ 'state': 'absent' }) }}"
+
+- name: Defining if the farmers are running
+  set_fact:
+    chia_farmer_is_running: "{{ chia_farmer_service.state == 'running' }}"
+    flax_farmer_is_running: "{{ flax_farmer_service.state == 'running' }}"
+
+- name: Stops running Chia farmer
+  become: yes
+  systemd:
+    name: chia-farmer
+    state: stopped
+  when: chia_farmer_is_running
+
+- name: Stops running Flax farmer
+  become: yes
+  systemd:
+    name: flax-node
+    state: stopped
+  when: flax_farmer_is_running
+
 - name: Ensure all storages are mounted
   import_tasks: mount.yaml
+
+- name: Starts running Chia farmer
+  become: yes
+  systemd:
+    name: chia-farmer
+    state: started
+  when: chia_farmer_is_running
+
+- name: Starts running Flax farmer
+  become: yes
+  systemd:
+    name: flax-node
+    state: started
+  when: flax_farmer_is_running
+
+

@@ -1,8 +1,0 @@
----
-- name: Build node ID xxhash
-  shell: "xxhsum -H0 /etc/machine-id | cut -d' ' -f1"
-  register: node_id_output
-
-- name: Set node ID xxhash fact
-  set_fact:
-    node_id: "{{ node_id_output.stdout }}"

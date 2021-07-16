@@ -34,3 +34,21 @@
     attached_farm_uuid_hashmap: "{{ attached_farm_uuid_hashmap | default({}) | combine({ item.0: item.1 }) }}"
   loop: "{{ attached_farm_uuids | zip(attached_farm_xxhashes) | list }}"
   when: attached_farm_uuids is defined and attached_farm_uuids | length > 0
+
+- name: Build dettached farm xxhashes
+  shell: "echo {{ item }} | xxhsum -H0 | cut -d' ' -f1"
+  with_items: "{{ dettached_farm_uuids }}"
+  when: dettached_farm_uuids is defined and dettached_farm_uuids | length > 0
+  register: dettached_farm_xxhash_outputs
+
+- name: Set dettached farm xxhashes fact
+  set_fact:
+    dettached_farm_xxhashes: "{{ dettached_farm_xxhashes | default([]) + [item.stdout] }}"
+  with_items: "{{ dettached_farm_xxhash_outputs.results }}"
+  when: dettached_farm_uuids is defined and dettached_farm_uuids | length > 0
+
+- name: Set dettached farm UUID hashmap fact
+  set_fact:
+    dettached_farm_uuid_hashmap: "{{ dettached_farm_uuid_hashmap | default({}) | combine({ item.0: item.1 }) }}"
+  loop: "{{ dettached_farm_uuids | zip(dettached_farm_xxhashes) | list }}"
+  when: dettached_farm_uuids is defined and dettached_farm_uuids | length > 0

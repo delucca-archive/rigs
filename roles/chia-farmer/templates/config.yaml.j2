@@ -2,7 +2,7 @@ path:
 {% for farm_xxhash in attached_farm_xxhashes %}
 - {{ mount_dir_path }}/farm-{{ farm_xxhash }}
 {% endfor %}
-minerName: xch-{{ ansible_user }}-{{ node_id }}
+minerName: {{ node_id }}
 apiKey: {{ hpool_api_key }}
 cachePath: ""
 deviceId: ""

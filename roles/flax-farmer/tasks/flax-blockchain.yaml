@@ -49,6 +49,16 @@
   command: "{{ flax_bin }} init"
   when: not flax_is_installed
 
+- name: Configure Flax alias
+  lineinfile:
+    path: "{{ home_dir_path }}/.bashrc"
+    line: "alias flax='{{ flax_bin }}'"
+    owner: "{{ ansible_user }}"
+    regexp: "^alias chia='{{ flax_bin }}'$"
+    state: present
+    insertafter: EOF
+    create: True
+
 - name: Copy Flax keypair temporary file
   copy:
     src: files/chia-mnemonics.txt
@@ -69,6 +79,7 @@
 - name: Add Flax plots dir
   command: "{{ flax_bin }} plots add -d {{ mount_dir_path }}/farm-{{ item }}"
   with_items: "{{ attached_farm_xxhashes }}"
+  when: attached_farm_xxhashes is defined
 
 - name: Checking Flax Node service path
   stat:

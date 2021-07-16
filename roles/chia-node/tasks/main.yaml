@@ -14,5 +14,5 @@
   import_tasks: chia-blockchain.yaml
   when: not chia_node_is_running
 
-- name: Setup notifications
-  import_tasks: notification.yaml
+- name: Setup Farmr
+  import_tasks: farmr.yaml
