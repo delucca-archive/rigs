@@ -1,5 +1,5 @@
 chia_keypair_desired_fingerprint: 664672856
-farmr_version: v1.4.6.2
+farmr_version: v1.5.3.4
 hpool_auth_token: !vault |
           $ANSIBLE_VAULT;1.1;AES256
           35346431393332636163393230343461363066366263316438653131363736303333333731653666
