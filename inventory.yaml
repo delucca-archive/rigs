@@ -5,13 +5,12 @@ all:
       ansible_connection: local
       ansible_python_interpreter: "{{ ansible_playbook_python }}"
       ansible_user: delucca
-      attached_harvester_uuids:
+      dettached_harvester_uuids:
       - da0fb299-11df-4ff8-a3bb-78799a80e38b
-        #dettached_farm_uuids:
       
     orca: &orca
       node_id: orca
-      ansible_host: 10.0.0.10
+      ansible_host: 10.0.0.8
       ansible_user: ff-farmer
       attached_harvester_uuids:
       - 8ba3f3a0-c30e-4250-99ad-de694fd4e1be
@@ -26,6 +25,8 @@ all:
       - 01351c96-6094-431c-bdb5-2c045af3d62f
       - 516ce99c-ce34-465d-85a1-05361d3e9053
       - c1838f2a-6dd6-40d5-b137-512f3274cd32
+      - 6f004b96-daba-4413-ab1f-fdcb2c7d956c
+      - 2b6f31f0-1e33-4f5c-8c30-e875c27ae2ff
       
     vaquita: &vaquita
       node_id: vaquita
@@ -34,8 +35,6 @@ all:
       attached_harvester_uuids:
       - 698797ee-37bb-4968-b2cd-789f7a16fdbc
       attached_farm_uuids:
-      - 6f004b96-daba-4413-ab1f-fdcb2c7d956c
-      - 2b6f31f0-1e33-4f5c-8c30-e875c27ae2ff
       - 25e760f4-e4c5-456a-b17b-89f051ed9fc3
       - 7f591d27-836d-49a3-8ff0-e0b3be26d47c
       - fdaeb4bd-0019-44e5-86a1-a25a805ed5fe
@@ -48,16 +47,13 @@ chia_farmers:
   hosts:
     beluga: *beluga
     orca: *orca
-    vaquita: *vaquita
 
 chia_harvesters:
   hosts:
     beluga: *beluga
     orca: *orca
-    vaquita: *vaquita
 
 flax_farmers:
   hosts:
     beluga: *beluga
     orca: *orca
-    vaquita: *vaquita
