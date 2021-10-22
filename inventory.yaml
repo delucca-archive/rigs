@@ -10,7 +10,7 @@ all:
       
     orca: &orca
       node_id: orca
-      ansible_host: 10.0.0.7
+      ansible_host: 10.0.0.3
       ansible_user: ff-farmer
       attached_harvester_uuids:
       - 8ba3f3a0-c30e-4250-99ad-de694fd4e1be
