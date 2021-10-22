@@ -10,7 +10,7 @@ Restart=always
 RestartSec=1
 User={{ ansible_user }}
 Group={{ ansible_user }}
-ExecStart=/usr/bin/env PATH={{ chia_install_path }}/venv/bin:$PATH chia start all
+ExecStart=/usr/bin/env PATH={{ chia_install_path }}/venv/bin:$PATH chia start node wallet
 ExecStop=/usr/bin/env PATH={{ chia_install_path }}/venv/bin:$PATH chia stop all -d
 
 [Install]
