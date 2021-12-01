@@ -32,13 +32,6 @@
   command: initdb --locale en_US.UTF-8 -D '/var/lib/postgres/data'
   when: not postgres_is_initialized
 
-- name: Ensure PostgreSQL service is running
-  become: yes
-  service:
-    name: postgresql
-    state: started
-    enabled: yes
-
 - name: Check AUR dependencies
   ignore_errors: yes
   shell: "pacman -Qs {{ item }}"

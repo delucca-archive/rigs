@@ -9,15 +9,11 @@
     path: "{{ whitesur_theme_install_dir_path }}"
   register: whitesur_theme_installation
 
-- name: Decide if WhiteSur theme is properly installed
-  set_fact:
-    whitesur_theme_is_installed: "{{ whitesur_theme_installation.stat.exists == true }}"
-
 - name: Fetch WhiteSur GTK theme
   git:
     repo: https://github.com/vinceliuice/WhiteSur-gtk-theme.git
     dest: "{{ whitesur_theme_install_dir_path }}"
-  when: not whitesur_theme_is_installed
+    update: yes
 
 - name: Install WhiteSur theme
   shell: ./install.sh -c dark -t blue -i arch
