@@ -116,6 +116,7 @@
 
 - name: Install pipx
   shell: "python3 -m {{ item }}"
+  ignore_errors: true # pipx returns a non-zero code if the package is already installed
   with_items:
   - pip install --user pipx
   - pipx ensurepath
